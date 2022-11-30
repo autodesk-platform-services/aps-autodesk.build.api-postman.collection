@@ -65,7 +65,7 @@
 								}
 							]
 						},
-						"description": "Returns a collection of accessible hubs for this member.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-GET/"
+						"description": "Returns a collection of accessible hubs for this member.<br/>\nhttps://aps.autodesk.com/en/docs/data/v2/reference/http/hubs-GET/"
 					},
 					"response": []
 				},
@@ -120,7 +120,7 @@
 								"projects"
 							]
 						},
-						"description": "Returns a collection of projects for a given hub_id. A project represents a BIM 360 Team project, a Fusion Team project, a BIM 360 Docs project, or an A360 Personal project. Multiple projects can be created within a single hub.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-GET/"
+						"description": "Returns a collection of projects for a given hub_id. A project represents a BIM 360 Team project, a Fusion Team project, a BIM 360 Docs project, or an A360 Personal project. Multiple projects can be created within a single hub.<br/>\nhttps://aps.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-GET/"
 					},
 					"response": []
 				}

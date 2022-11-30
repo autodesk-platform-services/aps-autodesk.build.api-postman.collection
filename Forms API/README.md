@@ -1,7 +1,9 @@
-# Postman Collection for Forms API 
+# Postman Collection for Forms API
 
-[![Postman](https://img.shields.io/badge/Postman-v8.0.7-orange.svg)](https://www.getpostman.com/)
-[![Autodesk Construction Cloud API](https://img.shields.io/badge/accapi-v1-green.svg)](https://forge.autodesk.com/en/docs/acc/v1/overview/)
+[![Postman](https://img.shields.io/badge/Postman-v8-orange.svg)](https://www.getpostman.com/)
+
+[![Autodesk Construction Cloud API](https://img.shields.io/badge/Autodesk%20Construction%20Cloud%20API-v1-green.svg)](https://aps.autodesk.com/en/docs/acc/v1/overview/)
+
 ![Beginner](https://img.shields.io/badge/Level-Beginner-green.svg)
 [![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
@@ -17,11 +19,11 @@ The collection will be kept updated with new APIs.
 
 ## Setup
 
-1.  **Forge Account**: Learn how to create a Forge Account, activate the subscription and create an app by [this tutorial](http://learnforge.autodesk.io/#/account/). Get Forge _client id_, _client secret_ and  _callback url_. Please register Forge app with the _callback url_ as 
+1.  **APS Account**: Learn how to create a APS Account, activate the subscription and create an app by [this tutorial](http://aps.autodesk.com/tutorials/#/account/). Get APS _client id_, _client secret_ and  _callback url_. Please register APS app with the _callback url_ as
 
     ```https://www.getpostman.com/oauth2/callback```
 
-2. **Autodesk Construction Cloud Account and Project**: must be Account Admin to add the app integration. [Learn about provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps). Make a note with the __account name__
+2. **Autodesk Construction Cloud Account and Project**: must be Account Admin to add the app integration. [Learn about provisioning](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/). Make a note with the __account name__
 
 3. Create one ACC project and activate Autodesk Build. Make a note with the __project name__ .
 
@@ -29,7 +31,7 @@ The collection will be kept updated with new APIs.
 
 5.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
-    ```git clone https://github.com/Autodesk-Forge/forge-autodesk.build.api-postman.collection```
+    ```git clone https://github.com/autodesk-platform-services/aps-autodesk.build.api-postman.collection```
 
 5. Import the collection and environment files to Postman
 
@@ -81,4 +83,4 @@ This sample is licensed under the terms of the [MIT License](http://opensource.o
 
 ## Written by
 
-Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Developer Advocate and Support](http://forge.autodesk.com)
+Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Developer Advocate and Support](http://aps.autodesk.com)
