@@ -30,7 +30,7 @@ This folder contains a Postman Collection that includes all the current ACC Phot
 ### Use the endpoints under **Run Firstly-Get Project ID** to set `project_id`, then you can play with any endpoint as you want.
 
 ## Tips & Tricks
-- These endpoints are mainly used to quick test|verfify based on your good understanding to cost module and API, the individual endpoint may not work, you need to set up the environment variables before running the Postman request.
+- These endpoints are mainly used to quick test|verfify based on your good understanding to Photos module and API, the individual endpoint may not work, you need to set up the environment variables before running the Postman request.
 
 ## License
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](../LICENSE) file for full details.

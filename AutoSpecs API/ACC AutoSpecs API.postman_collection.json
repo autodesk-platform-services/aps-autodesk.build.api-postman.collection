@@ -1,0 +1,605 @@
+{
+	"info": {
+		"_postman_id": "d59a1397-a175-4848-8db9-99759f0cf092",
+		"name": "ACC AutoSpecs API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7186"
+	},
+	"item": [
+		{
+			"name": "API References",
+			"item": [
+				{
+					"name": "Get Projects Metadata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Projects Metadata of AutoSpec API, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"find first version id: \", function () {",
+									"    var body = JSON.parse(responseBody); ",
+									"    pm.expect(body.versions).not.eq(undefined); ",
+									"    if(body.versions && body.versions.length >0) ",
+									"        pm.collectionVariables.set(\"versionId\",body.versions[0].id) ",
+									"});",
+									"",
+									"",
+									"",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							},
+							{
+								"key": "userId",
+								"value": "200902260532621",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "userId",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/autospecs/v1/projects/:projectId/metadata",
+							"host": [
+								"{{APSBaseDomain}}construction"
+							],
+							"path": [
+								"autospecs",
+								"v1",
+								"projects",
+								":projectId",
+								"metadata"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Smart Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Smart Register, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"}); ",
+									"",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}/construction/autospecs/v1/projects/:projectId/version/:versionId/smartregister",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"autospecs",
+								"v1",
+								"projects",
+								":projectId",
+								"version",
+								":versionId",
+								"smartregister"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "versionId",
+									"value": "{{versionId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Submittal Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Submittal Summary, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"}); ",
+									"",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							},
+							{
+								"key": "userId",
+								"value": "200902260532621",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{APSBaseDomain}}/construction/autospecs/v1/projects/:projectId/version/:versionId/submittalsSummary",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"autospecs",
+								"v1",
+								"projects",
+								":projectId",
+								"version",
+								":versionId",
+								"submittalsSummary"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "versionId",
+									"value": "{{versionId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Requirements",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Requirements, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"}); ",
+									"",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}/construction/autospecs/v1/projects/:projectId/version/:versionId/requirements",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"autospecs",
+								"v1",
+								"projects",
+								":projectId",
+								"version",
+								":versionId",
+								"requirements"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "versionId",
+									"value": "{{versionId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tutorials",
+			"item": [
+				{
+					"name": "Retrieve a Smart Register",
+					"item": [
+						{
+							"name": "Step 1: Find the ID of ACC Account",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get account collection, Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var accountName = pm.collectionVariables.get(\"accountName\") ",
+											"console.log(accountName)",
+											"pm.test(\"find matches account by name: \" + accountName, function () {",
+											"    var body = JSON.parse(responseBody);",
+											"    var find = body.data.find(d=>d.attributes.name == accountName)",
+											"    pm.expect(find).not.eq(undefined); ",
+											"    if(find) ",
+											"        pm.collectionVariables.set(\"accountId\", find.id.split(\"b.\").join(\"\"));",
+											"    ",
+											"});",
+											"",
+											"     "
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{APSBaseDomain}}/project/v1/hubs",
+									"host": [
+										"{{APSBaseDomain}}"
+									],
+									"path": [
+										"project",
+										"v1",
+										"hubs"
+									]
+								},
+								"description": "GET all hubs of your account, and get one hub. Please provide the hub name (hub_name) in environment variables"
+							},
+							"response": []
+						},
+						{
+							"name": "Step 2- Find the Project ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get project collection, Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var projectName = pm.collectionVariables.get(\"projectName\") ",
+											"pm.test(\"find matches project by name: \" + projectName, function () {",
+											"    var body = JSON.parse(responseBody);",
+											"    var find = body.data.find(d=>d.attributes.name == projectName) ",
+											"    pm.expect(find).not.eq(undefined);   ",
+											"    if(find)",
+											"        pm.collectionVariables.set(\"projectId\", find.id.split(\"b.\").join(\"\")); ",
+											"",
+											"});",
+											"",
+											"     "
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{APSBaseDomain}}/project/v1/hubs/b.{{accountId}}/projects",
+									"host": [
+										"{{APSBaseDomain}}"
+									],
+									"path": [
+										"project",
+										"v1",
+										"hubs",
+										"b.{{accountId}}",
+										"projects"
+									]
+								},
+								"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+							},
+							"response": []
+						},
+						{
+							"name": "Step 3: Find the Spec Version",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Find the Spec Version, Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"}); "
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{APSBaseDomain}}construction/autospecs/v1/projects/:projectId/metadata",
+									"host": [
+										"{{APSBaseDomain}}construction"
+									],
+									"path": [
+										"autospecs",
+										"v1",
+										"projects",
+										":projectId",
+										"metadata"
+									],
+									"variable": [
+										{
+											"key": "projectId",
+											"value": "{{projectId}}"
+										}
+									]
+								},
+								"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+							},
+							"response": []
+						},
+						{
+							"name": "Step 4: Retrieve the Smart Register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Retrieve the Smart Register, Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"}); "
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{APSBaseDomain}}/construction/autospecs/v1/projects/:projectId/version/:versionId/smartregister",
+									"host": [
+										"{{APSBaseDomain}}"
+									],
+									"path": [
+										"construction",
+										"autospecs",
+										"v1",
+										"projects",
+										":projectId",
+										"version",
+										":versionId",
+										"smartregister"
+									],
+									"variable": [
+										{
+											"key": "projectId",
+											"value": "{{projectId}}"
+										},
+										{
+											"key": "versionId",
+											"value": "{{versionId}}"
+										}
+									]
+								},
+								"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v2/token",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{clientSecret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{clientId}}",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "data:read",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://www.getpostman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "access_token",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "clientId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "clientSecret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "APSBaseDomain",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "projectId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "accountName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "projectName",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
