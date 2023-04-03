@@ -20,7 +20,7 @@ This folder contains a Postman Collection that includes all the current ACC Auto
     - accountName: The name of ACC account(hub) (for test with tutorial from step 1) 
     - projectName:  The name of ACC project (for test with tutorial from step 1 ) 
    
-    <p align="center"><img src="./img/variables.png" width="200" ></p> 
+    <p align="center"><img src="./img/variables.png" width="400" ></p> 
 
 ### Setup Authorization and Generate Token
 This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically 
