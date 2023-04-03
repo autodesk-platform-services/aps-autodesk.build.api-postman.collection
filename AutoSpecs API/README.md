@@ -11,8 +11,6 @@
 
 This folder contains a Postman Collection that includes all the current ACC AutoSpecs API. The collection together with the environment help you easily test these endpoints.
 
-![Collection](img/collection.png) 
-
 ### Setup Postman environment
 - Import Postman collection
 - Setup the following environment in **variables** tab: 
@@ -22,7 +20,7 @@ This folder contains a Postman Collection that includes all the current ACC Auto
     - accountName: The name of ACC account(hub) (for test with tutorial from step 1) 
     - projectName:  The name of ACC project (for test with tutorial from step 1 ) 
    
-   <p align="center"><img src="./img/var.png" width="400" ></p> 
+   <p align="center"><img src="./img/var.png" width="200" ></p> 
 
 ### Setup Authorization and Generate Token
 This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically 
@@ -40,7 +38,7 @@ This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/p
 
    Click **Get New Access Token**, it will direct to login Autodesk account, after it succeeds, the token will be generated. Click **Save** if it is enabled.  
 
-   <p align="center"><img src="./img/token.png" width="600" ></p> 
+   <p align="center"><img src="./img/token.png" width="400" ></p> 
 
 ### API Test
 
@@ -50,7 +48,7 @@ This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/p
 
 3. To test tutorial, input accountName and projectName firstly. The step1 and step2 will get account id and project id.
 
-   <p align="center"><img src="./img/collection.png" width="600" ></p> 
+   <p align="center"><img src="./img/collection.png" width="300" ></p> 
 
 3. With [Postman Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/), these scripts can be chained to perform auto-test. Check **Tests** tab to define your preferred tests. 
 
