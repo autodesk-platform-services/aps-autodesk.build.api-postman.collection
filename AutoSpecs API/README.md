@@ -48,7 +48,7 @@ This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/p
 
 3. To test tutorial, input accountName and projectName firstly. The step1 and step2 will get account id and project id.
 
-   <p align="center"><img src="./img/collection.png" width="300" ></p> 
+   <p align="center"><img src="./img/collectionlist.png" width="300" ></p> 
 
 3. With [Postman Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/), these scripts can be chained to perform auto-test. Check **Tests** tab to define your preferred tests. 
 
