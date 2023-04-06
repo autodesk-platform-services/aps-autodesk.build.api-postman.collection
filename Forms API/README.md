@@ -2,87 +2,70 @@
 
 [![Postman](https://img.shields.io/badge/Postman-v8-orange.svg)](https://www.getpostman.com/)
 
+[![Autodesk Authentication API](https://img.shields.io/badge/AuthenticationAPI-v2-blue.svg)](https://aps.autodesk.com/en/docs/oauth/v2/overview/)
+
 [![Autodesk Construction Cloud API](https://img.shields.io/badge/Autodesk%20Construction%20Cloud%20API-v1-green.svg)](https://aps.autodesk.com/en/docs/acc/v1/overview/)
 
-[![Forms API](https://img.shields.io/badge/forms-api-v1-blue.svg)](https://aps.autodesk.com/en/docs/acc/v1/overview/field-guide/forms/)
+[![Forms API](https://img.shields.io/badge/formsapi-v1-blue.svg)](https://aps.autodesk.com/en/docs/acc/v1/overview/field-guide/forms/)
 
 ![Beginner](https://img.shields.io/badge/Level-Beginner-green.svg)
 [![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
-Forms is one of modules in Autodesk Build. It allows your team to securely fill out, review, and manage project forms, in a format of checklist fields. The template can be a web form defined by template builder, or from a pdf file with smart fields. The contributors create form with the template and input their answer, options, notes, signatures etc. The form will be submitted finally for reviewers to review. Check [product help](https://help.autodesk.com/view/BUILD/ENU/?guid=Build_Forms_about_forms_html) for details.
-
 ## Description
+This folder contains a Postman Collection that includes all the endpoints of current ACC Forms API and the demo tutorials. The collection will be kept updated with new APIs.  
 
-This repository provides demos for Forms API. Currently, the public APIs:
- - GET form-templates
- - GET forms  
+### Setup Postman environment
 
-The collection will be kept updated with new APIs.  
+- Import Postman collection file. It contains the endpoints test, predefined **variables** of collection enviroment and predefined **Authorization**. The endpoints test includes _Run Firstly_ which gets account id, project id, assignee id etc firstly. Tutorials includes a few demo workflows. API Reference provides the demo of each API endpoint.
 
-## Setup
+- Input your information in  **variables** tab
+   If you want to test from _Run Firstly_, input the enviroment variables only: clientId, clientSecret, accountName, projectName, one_user_email_as_assignee. 
 
-1.  **APS Account**: Learn how to create a APS Account, activate the subscription and create an app by [this tutorial](http://aps.autodesk.com/tutorials/#/account/). Get APS _client id_, _client secret_ and  _callback url_. Please register APS app with the _callback url_ as
+   If you want to test specific endpoints directly, input the neccesary data in advance (e.g. projectId, formId etc..)
 
-    ```https://www.getpostman.com/oauth2/callback```
+    <p align="center"><img src="./img/variables.png" width="600" ></p>  
 
-2. **Autodesk Construction Cloud Account and Project**: must be Account Admin to add the app integration. [Learn about provisioning](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/). Make a note with the __account name__
+- ensure the callback url of your APS application is 
+```https://www.getpostman.com/oauth2/callback```
 
-3. Create one ACC project and activate Autodesk Build. Make a note with the __project name__ .
 
-4. Create some Forms with Forms template, and create some custom templates. 
+### API Test
 
-5.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
+1. Create some pdf and non-pdf templates in ACC UI firstly. In non-pdf forms, create some custom fields and add some tables (materials, equipments, worklog).
 
-    ```git clone https://github.com/autodesk-platform-services/aps-autodesk.build.api-postman.collection```
+2. Generate the 3-legged token from **Authorization** tab. This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically.
 
-5. Import the collection and environment files to Postman
+3. Assume only account name, project name and one user email are abvailable in **variables**, click the test scripts in _Run First_ in sequence.
 
-6. In environment, input _client id_, _client secret_, _acc_account_name_ and _acc_project_name_.
+4. To test tutorial, click the test scripts in sequence. 
 
-   <p align="center"><img src="./img/env.png" width="800" ></p>  
+   In the tutorial **Manage Forms** 
+      Step 1: get one non-pdf template
+      Step 2: create a form with that. After creation, the post-scripts will collect available fields ids of text, number, date, choice, signature, table etc, for the subsequent test. 
+      Step 3: edit some general attributes of the forms.
+      Step 4: in pre-scripts, it will check if any fields ids of text, number, date, choice, signature is available, if any table is available. Prepare some input values for the corresponding fields or tables. The payload will be stringfy as a variable. This variable will be used as a payload in Body in this request.
+      Step 5: edit some other general attributes of the forms such as change its status.
+ 
+5. In API References, it shows the basic usage of the API endpoints. For updating the field values of non-pdf form,  a few scenarios are provided:
 
-## Generate Token
+   - update text, date, number, toggle: these are similar. fieldId and corresponding value
+   - update signatures: this will need fieldId, based64 encoded string and signature name.
+   - update tables: the rows with columns will be defined
+   - update choice, array: these are similar. The demo will be provides soon.
 
-This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
+6. With [Postman Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/), these scripts can be chained to perform auto-test. Check **Tests** tab to define your preferred tests. 
 
-Forms API endpoints support 3-legged token only.
+### Documentation
 
-   In context menu of collection >> **Edit**, switch to the tab **Authorization**. switch type to **OAuth 2.0**:
-   <p align="center"><img src="./img/3legged.png" width="800" ></p> 
+- [Forms API Field Guid](https://aps.autodesk.com/en/docs/acc/v1/overview/field-guide/forms/)
+- [Forms API Reference](https://aps.autodesk.com/en/docs/acc/v1/reference/http/autospecs-getprojectmetadata-GET/)
+- [Forms API Tutorial](https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-valuesbatch-update-PUT/)
 
-   input the variables in __Authorization__.
 
-   - Grant Type ``Authorization Code``
-   - Callback URL  ``https://www.getpostman.com/oauth2/callback``
-   - Auth URL  ``https://developer.api.autodesk.com/authentication/v1/authorize``
-   - Access Token URL  ``https://developer.api.autodesk.com/authentication/v1/gettoken``
-   - Client ID ``{{client_id}}``
-   - Client Secret ``{{client_secret}}``
-   - Scope ``data:read``
-   - Client Authentication ``Send Client credentials body``
+### License
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](../LICENSE) file for full details.
 
-   Click **Get New Access Token**, it will direct to login Autodesk account, after it succeeds, the token will be generated. Click **Save** if it is enabled.  
-
-   <p align="center"><img src="./img/token.png" width="600" ></p> 
-
-## API Test
-
-1. Assume the steps of **Setup** have been performed. The access token is ready.
-
-2. Play the scripts of single endpoints or tutorial endpoints in sequence. Try to change some parameters or body with more scenarios. 
-   <p align="center"><img src="./img/collection.png" width="600" ></p> 
-      <p align="center"><img src="./img/tutorial.png" width="600" ></p> 
-  ensure to run the prerequesite endpoints to get account id and project id.
-
-3. With [Postman Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/), these scripts can be chained to perform auto-test. Check **Tests** tab to define your preferred tests.
-
-   <p align="center"><img src="./img/runner1.png" width="600" ></p> 
-   <p align="center"><img src="./img/runner2.png" width="600" ></p> 
-
-## License
-
-This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
-
-## Written by
-
+### Written by
 Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Developer Advocate and Support](http://aps.autodesk.com)
+
+ 
