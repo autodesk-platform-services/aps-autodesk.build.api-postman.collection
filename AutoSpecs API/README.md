@@ -16,10 +16,10 @@ This folder contains a Postman Collection that includes all the endpoints of cur
 
 ### Setup Postman environment
 
-- Import Postman collection file. It contains the endpoints test, predefined **variables** of collection enviroment and predefined **Authorization**.  
+- Import Postman collection file. It contains the endpoints test, predefined **variables** of collection environment and predefined **Authorization**.  
 
 - Input your information in  **variables** tab
-   If you want to test from _Run Firstly_, input the enviroment variables only: clientId, clientSecret, accountName, projectName. If you have known the projectId, input its value directly.
+   If you want to test from _Run Firstly_, input the environment variables only: clientId, clientSecret, accountName, projectName. If you have known the projectId, input its value directly.
 
     <p align="center"><img src="./img/variables.png" width="600" ></p>  
 

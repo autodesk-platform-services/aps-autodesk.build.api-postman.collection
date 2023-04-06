@@ -19,9 +19,9 @@ This folder contains a Postman Collection that includes all the endpoints of cur
 - Import Postman collection file. It contains the endpoints test, predefined **variables** of collection enviroment and predefined **Authorization**. The endpoints test includes _Run Firstly_ which gets account id, project id, assignee id etc firstly. Tutorials includes a few demo workflows. API Reference provides the demo of each API endpoint.
 
 - Input your information in  **variables** tab
-   If you want to test from _Run Firstly_, input the enviroment variables only: clientId, clientSecret, accountName, projectName, one_user_email_as_assignee. 
+   If you want to test from _Run Firstly_, input the environment variables only: clientId, clientSecret, accountName, projectName, one_user_email_as_assignee. 
 
-   If you want to test specific endpoints directly, input the neccesary data in advance (e.g. projectId, formId etc..)
+   If you want to test specific endpoints directly, input the necessary data in advance (e.g. projectId, formId etc..)
 
     <p align="center"><img src="./img/variables.png" width="600" ></p>  
 
@@ -35,7 +35,7 @@ This folder contains a Postman Collection that includes all the endpoints of cur
 
 2. Generate the 3-legged token from **Authorization** tab. This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply token to every endpoint in the collection automatically.
 
-3. Assume only account name, project name and one user email are abvailable in **variables**, click the test scripts in _Run First_ in sequence.
+3. Assume only account name, project name and one user email are available in **variables**, click the test scripts in _Run First_ in sequence.
 
 4. To test tutorial, click the test scripts in sequence. 
 
