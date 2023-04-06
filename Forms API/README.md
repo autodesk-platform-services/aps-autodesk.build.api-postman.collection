@@ -40,18 +40,20 @@ This folder contains a Postman Collection that includes all the endpoints of cur
 4. To test tutorial, click the test scripts in sequence. 
 
    In the tutorial **Manage Forms** 
-      Step 1: get one non-pdf template
-      Step 2: create a form with that. After creation, the post-scripts will collect available fields ids of text, number, date, choice, signature, table etc, for the subsequent test. 
-      Step 3: edit some general attributes of the forms.
-      Step 4: in pre-scripts, it will check if any fields ids of text, number, date, choice, signature is available, if any table is available. Prepare some input values for the corresponding fields or tables. The payload will be stringfy as a variable. This variable will be used as a payload in Body in this request.
-      Step 5: edit some other general attributes of the forms such as change its status.
+
+      - Step 1: get one non-pdf template
+
+      - Step 2: create a form with that. After creation, the post-scripts will collect available fields ids of text, number, date, choice, signature, table etc, for the subsequent test. 
+      - Step 3: edit some general attributes of the forms.
+      - Step 4: in pre-scripts, it will check if any fields ids of text, number, date, choice, signature is available, if any table is available. Prepare some input values for the corresponding fields or tables. The payload will be stringfy as a variable. This variable will be used as a payload in Body in this request.
+      - Step 5: edit some other general attributes of the forms such as change its status.
  
 5. In API References, it shows the basic usage of the API endpoints. For updating the field values of non-pdf form,  a few scenarios are provided:
 
-   - update text, date, number, toggle: these are similar. fieldId and corresponding value
+   - update text, date, number, toggle: these are similar. Input fieldId and corresponding value
    - update signatures: this will need fieldId, based64 encoded string and signature name.
    - update tables: the rows with columns will be defined
-   - update choice, array: these are similar. The demo will be provides soon.
+   - update choice, array: these are similar. The demo will be provided soon.
 
 6. With [Postman Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/), these scripts can be chained to perform auto-test. Check **Tests** tab to define your preferred tests. 
 
