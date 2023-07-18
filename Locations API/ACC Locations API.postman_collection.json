@@ -1578,6 +1578,21 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{base_domain}}authentication/v2/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "{{base_domain}}authentication/v2/authorize",
+				"type": "string"
+			},
+			{
 				"key": "scope",
 				"value": "data:read data:write",
 				"type": "string"
@@ -1613,23 +1628,8 @@
 				"type": "string"
 			},
 			{
-				"key": "authUrl",
-				"value": "{{base_domain}}authentication/v1/authorize",
-				"type": "string"
-			},
-			{
 				"key": "addTokenTo",
 				"value": "header",
-				"type": "string"
-			},
-			{
-				"key": "client_authentication",
-				"value": "body",
-				"type": "string"
-			},
-			{
-				"key": "accessTokenUrl",
-				"value": "{{base_domain}}authentication/v1/gettoken",
 				"type": "string"
 			}
 		]

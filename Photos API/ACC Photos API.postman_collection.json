@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "5dc6f19d-bc49-4b10-948b-7cf06aa54c3a",
 		"name": "ACC Photos API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "343460"
 	},
 	"item": [
 		{
@@ -296,6 +297,21 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "{{base_domain}}authentication/v2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{base_domain}}authentication/v2/token",
+				"type": "string"
+			},
+			{
 				"key": "clientId",
 				"value": "{{client_id}}",
 				"type": "string"
@@ -303,16 +319,6 @@
 			{
 				"key": "clientSecret",
 				"value": "{{client_secret}}",
-				"type": "string"
-			},
-			{
-				"key": "accessTokenUrl",
-				"value": "{{base_domain}}authentication/v1/gettoken",
-				"type": "string"
-			},
-			{
-				"key": "authUrl",
-				"value": "{{base_domain}}authentication/v1/authorize",
 				"type": "string"
 			},
 			{
@@ -343,11 +349,6 @@
 			{
 				"key": "addTokenTo",
 				"value": "header",
-				"type": "string"
-			},
-			{
-				"key": "client_authentication",
-				"value": "body",
 				"type": "string"
 			}
 		]
