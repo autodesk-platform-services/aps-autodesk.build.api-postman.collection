@@ -1,0 +1,1762 @@
+{
+	"info": {
+		"_postman_id": "790ad581-5546-42db-b1fc-6906d7b2fdc6",
+		"name": "ACC Submittals API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "343460"
+	},
+	"item": [
+		{
+			"name": "API References",
+			"item": [
+				{
+					"name": "Run Firstly-Get Project ID",
+					"item": [
+						{
+							"name": "GET one ACC account",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// find the specified project and setup the environment variable \"hub_id\"",
+											"const hub_name = pm.variables.get(\"hub_name\");",
+											"pm.test(\"find matches account by name: \" + hub_name, function () {",
+											"    const body = JSON.parse(responseBody);",
+											"    const found = body.data.find(d => d.attributes.name == hub_name);",
+											"",
+											"    pm.expect(found).to.not.be.undefined;",
+											"    ",
+											"    pm.environment.set(\"hub_id\", found.id);",
+											"    pm.environment.set(\"account_id\", found.id.split(\"b.\").join(\"\"));",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.variables.set(\"hub_name\", \"change to your hub/account name\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/project/v1/hubs?filter[extension.type]=hubs:autodesk.bim360:Account",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"project",
+										"v1",
+										"hubs"
+									],
+									"query": [
+										{
+											"key": "filter[extension.type]",
+											"value": "hubs:autodesk.bim360:Account"
+										}
+									]
+								},
+								"description": "Returns a collection of accessible hubs for this member.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-GET/"
+							},
+							"response": []
+						},
+						{
+							"name": "GET one ACC project",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.variables.set(\"project_name\", \"change to your project name\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// find the specified project and setup the environment variable \"project_id\"",
+											"const project_name = pm.variables.get(\"project_name\") ",
+											"pm.test(\"find matches project by name: \" + project_name, function () {",
+											"    const body = JSON.parse(responseBody);",
+											"    const found = body.data.find(d => d.attributes.name == project_name)",
+											"",
+											"    pm.expect(found).to.not.be.undefined;",
+											"    ",
+											"    postman.setEnvironmentVariable(\"project_id\", found.id);",
+											"    postman.setEnvironmentVariable(\"project_id_without_b\", found.id.split(\"b.\").join(\"\"));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}project/v1/hubs/{{hub_id}}/projects",
+									"host": [
+										"{{base_domain}}project"
+									],
+									"path": [
+										"v1",
+										"hubs",
+										"{{hub_id}}",
+										"projects"
+									]
+								},
+								"description": "Returns a collection of projects for a given hub_id. A project represents a BIM 360 Team project, a Fusion Team project, a BIM 360 Docs project, or an A360 Personal project. Multiple projects can be created within a single hub.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-GET/"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Submittals - GET Items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    //pm.expect(responseBody.results && responseBody.results.length > 0).to.eql(true);",
+									"    pm.expect(responseBody.results).to.be.an(\"array\");",
+									"",
+									"    if(responseBody.results.length > 0) {",
+									"        pm.environment.set(\"item_id\", responseBody.results[0].id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/items",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"items"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Maximal number of elements per page",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "2",
+									"description": "Starting position of the query in relation to the complete set of items",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "createdAt desc",
+									"description": "Comma-delimited list of fields to sort by in the format field asc/desc - ballInCourtUsers, ballInCourtCompanies, ballInCourtRoles, ballInCourtType, createdAt, createdBy, description, dueDate, id, identifier, leadTime, manager, managerType, managerDueDate, package.identifier, package.spec.identifier, packageId, packageIdentifier, packageSpecIdentifier, packageTitle, priority, publishedBy, publishedDate, receivedFromReview, receivedFromSubmitter, requiredApprovalDate, requiredDate, requiredOnJobDate, respondedAt, respondedBy, response.value, responseComment, responseId, revision, sentToReview, sentToReviewBy, sentToSubmitter, spec.identifier, specId, specIdentifier, specTitle, stateId, statusId, subcontractor, subcontractorType, submittedBy, submitterDueDate, subsection, title, type.value, typeId, updatedAt, updatedBy, watchers",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Test3",
+									"description": "Search term in identifier, title, spec identifier, ball in court fields",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "Test3,Water Closet",
+									"description": "Filter items by their title. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[statusId]",
+									"value": "1",
+									"description": "Filter items by their status id. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[specId]",
+									"value": "{{spec_id}}",
+									"description": "Filter items by their spec id. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[ballInCourtUsers]",
+									"value": "T5PKRC57TLQ8",
+									"description": "Filter items by their ball-in-court user id. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[ballInCourtCompanies]",
+									"value": "237390714",
+									"description": "Filter items by their ball-in-court company id. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[ballInCourtRoles]",
+									"value": "237390721",
+									"description": "Filter items by their ball-in-court role id. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[responseId]",
+									"value": "{{response_id}}",
+									"description": "Filter items by their response id. Separate multiple values with commas.",
+									"disabled": true
+								},
+								{
+									"key": "filter[typeId]",
+									"value": "{{item_type_id}}",
+									"description": "Filter items by their type id. Separate multiple values with commas.",
+									"disabled": true
+								},
+								{
+									"key": "filter[stateId]",
+									"value": "sbc-2",
+									"description": "Filter items by their state id. Separate multiple values with commas.",
+									"disabled": true
+								},
+								{
+									"key": "filter[identifier]",
+									"value": "8",
+									"description": "Filter items by their unique item identifier. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[leadTime]",
+									"value": "5",
+									"description": "Filter items by their lead time.",
+									"disabled": true
+								},
+								{
+									"key": "filter[revision]",
+									"value": "0",
+									"description": "Filter items by their revision. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[manager]",
+									"value": "W8ZDPLUTSJKZ",
+									"description": "Filter items by the Autodesk ID of the manager.",
+									"disabled": true
+								},
+								{
+									"key": "filter[managerType]",
+									"value": "1",
+									"description": "Filter items by the manager type.",
+									"disabled": true
+								},
+								{
+									"key": "filter[subcontractor]",
+									"value": "T5PKRC57TLQ8",
+									"description": "Filter items by the Autodesk ID of the subcontractor.",
+									"disabled": true
+								},
+								{
+									"key": "filter[subcontractorType]",
+									"value": "2",
+									"description": "Filter items by the subcontractor type.",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdBy]",
+									"value": "W8ZDPLUTSJKZ",
+									"description": "Filter items by the Autodesk ID of the user that created the item.",
+									"disabled": true
+								},
+								{
+									"key": "filter[watchers]",
+									"value": "W8ZDPLUTSJKZ",
+									"description": "Filter items by the Autodesk ID of the watchers. Separate multiple values with commas.",
+									"disabled": true
+								},
+								{
+									"key": "filter[dueDate]",
+									"value": "2023-09-13",
+									"description": "Filter items by their due date, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[submitterDueDate]",
+									"value": "",
+									"description": "Filter items by their submitter’s due date, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[managerDueDate]",
+									"value": "",
+									"description": "Filter items by their managers’ due date, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdAt]",
+									"value": "",
+									"description": "Filter items by their creation date, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[sentToSubmitter]",
+									"value": "",
+									"description": "Filter items by their by the date they were sent to submittar, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[receivedFromSubmitter]",
+									"value": "",
+									"description": "Filter items by their by the date they were recieved from submittar, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[sentToReview]",
+									"value": "",
+									"description": "Filter items by their by the date they were sent from review, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[receivedFromReview]",
+									"value": "",
+									"description": "Filter items by their by the date they were received from review, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[publishedDate]",
+									"value": "",
+									"description": "Filter items by their by the date they were published, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[requiredDate]",
+									"value": "",
+									"description": "Filter items by their by the date when the responsible contractor needs to submit the Submittal to the Submittal Manager. in the following URL-encoded format YYYY-MM-DD. ",
+									"disabled": true
+								},
+								{
+									"key": "filter[requiredApprovalDate]",
+									"value": "",
+									"description": "Filter items by their required approval date, in the following URL-encoded format YYYY-MM-DD.",
+									"disabled": true
+								},
+								{
+									"key": "filter[requiredOnJobDate]",
+									"value": "",
+									"description": "Filter items by their by the date they are required on field (job site), in the following URL-encoded format YYYY-MM-DD. ",
+									"disabled": true
+								},
+								{
+									"key": "filter[updatedAt]",
+									"value": "",
+									"description": "Filter items by their by the date they were updated, in the following URL-encoded format YYYY-MM-DD. ",
+									"disabled": true
+								},
+								{
+									"key": "filter[id]",
+									"value": "54ca6379-2607-4fd9-9ec7-b60ae4b2b567",
+									"description": "Filter items by their unique submittals id. Separate multiple values with commas",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET One Item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    pm.expect(responseBody).to.has.property('id');",
+									"",
+									"    pm.environment.set(\"item_type_id\", responseBody.typeId);",
+									"    pm.environment.set(\"response_id\", responseBody.responseId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/items/:itemId",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"items",
+								":itemId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "itemId",
+									"value": "{{item_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET One ItemType",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    pm.expect(responseBody).to.has.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/item-types/:itemTypeId",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"item-types",
+								":itemTypeId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "itemTypeId",
+									"value": "{{item_type_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET Attachments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    //pm.expect(responseBody.results && responseBody.results.length > 0).to.eql(true);",
+									"    pm.expect(responseBody.results).to.be.an(\"array\");",
+									"",
+									"    if(responseBody.results.length > 0) {",
+									"        pm.environment.set(\"attachment_id\", responseBody.results[0].id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/items/:itemId/attachments",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"items",
+								":itemId",
+								"attachments"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"description": "Maximal number of elements per page",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "1",
+									"description": "Starting position of the query in relation to the complete set of items",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "categoryId desc",
+									"description": "Comma-delimited list of fields to sort by in the format field asc/desc - id, isFileUploaded, asyncState, createdBy, createdAt, updatedBy, updatedAt, name, uploadUrn, urn, urnPage, resourceUrns, urnTypeId, urnVersion, revision, categoryId, isReview, isResponse",
+									"disabled": true
+								},
+								{
+									"key": "filter[categoryId]",
+									"value": "5",
+									"description": "Filter attachments by their category identifier. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[revision]",
+									"value": "1",
+									"description": "Filter attachments by their revision. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[isFileUploaded]",
+									"value": "true",
+									"description": "Filter attachments by whether they completed the upload process.",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "itemId",
+									"value": "{{item_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET One Response",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    pm.expect(responseBody).to.has.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/responses/:responseId",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"responses",
+								":responseId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "responseId",
+									"value": "{{response_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET Specs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    //pm.expect(responseBody.results && responseBody.results.length > 0).to.eql(true);",
+									"    pm.expect(responseBody.results).to.be.an(\"array\");",
+									"",
+									"    if(responseBody.results.length > 0) {",
+									"        pm.environment.set(\"spec_id\", responseBody.results[0].id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/specs",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"specs"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"description": "Maximal number of elements per page",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "1",
+									"description": "Starting position of the query in relation to the complete set of items",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "2",
+									"description": "Search term in title, identifier",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "categoryId desc",
+									"description": "Comma-delimited list of fields to sort by in the format field asc/desc - identifier, title",
+									"disabled": true
+								},
+								{
+									"key": "filter[identifier]",
+									"value": "224000",
+									"description": "Filter items by their spec id. Separate multiple values with commas",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET One Spec",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    pm.expect(responseBody).to.has.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/specs/:specId",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"specs",
+								":specId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "specId",
+									"value": "{{spec_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET Packages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    //pm.expect(responseBody.results && responseBody.results.length > 0).to.eql(true);",
+									"    pm.expect(responseBody.results).to.be.an(\"array\");",
+									"",
+									"    if(responseBody.results.length > 0) {",
+									"        pm.environment.set(\"package_id\", responseBody.results[0].id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/packages",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"packages"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"description": "Maximal number of elements per page",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "1",
+									"description": "Starting position of the query in relation to the complete set of items",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "title desc",
+									"description": "Comma-delimited list of fields to sort by in the format field asc/desc - ‘id’, ‘identifier’, ‘title’, ‘description’, ‘spec’, ‘spec.identifier’",
+									"disabled": true
+								},
+								{
+									"key": "filter[identifier]",
+									"value": "1",
+									"description": "Comma-delimited list of fields to sort by in the format field asc/desc - ‘id’, ‘identifier’, ‘title’, ‘description’, ‘spec’, ‘spec.identifier’",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "Plumbing,Concrete",
+									"description": "Filter packages by their title. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[specId]",
+									"value": "f2e6b63a-0a83-4ced-ad84-29599e204d38",
+									"description": "Filter packages by the specs IDs they are associated with. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "filter[spec.identifier]",
+									"value": "224000",
+									"description": "Filter packages by the specs identifiers they are associated with. Separate multiple values with commas",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "2",
+									"description": "Search term in identifier, title, spec.identifier",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submittals - GET One Package",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type header present and is application/json\", () => {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    var responseBody = pm.response.json();",
+									"    pm.expect(responseBody).to.has.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/packages/:packageId",
+							"host": [
+								"{{base_domain}}construction"
+							],
+							"path": [
+								"submittals",
+								"v2",
+								"projects",
+								":projectId",
+								"packages",
+								":packageId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "packageId",
+									"value": "{{package_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tutorials",
+			"item": [
+				{
+					"name": "Download Submittal Attachments",
+					"item": [
+						{
+							"name": "Step 0: Run Firstly-Get Project ID",
+							"item": [
+								{
+									"name": "GET one ACC account",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"// find the specified project and setup the environment variable \"hub_id\"",
+													"const hub_name = pm.variables.get(\"hub_name\");",
+													"pm.test(\"find matches account by name: \" + hub_name, function () {",
+													"    const body = JSON.parse(responseBody);",
+													"    const found = body.data.find(d => d.attributes.name == hub_name);",
+													"",
+													"    pm.expect(found).to.not.be.undefined;",
+													"    ",
+													"    pm.environment.set(\"hub_id\", found.id);",
+													"    pm.environment.set(\"account_id\", found.id.split(\"b.\").join(\"\"));",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.variables.set(\"hub_name\", \"change to your hub/account name\");"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_domain}}/project/v1/hubs?filter[extension.type]=hubs:autodesk.bim360:Account",
+											"host": [
+												"{{base_domain}}"
+											],
+											"path": [
+												"project",
+												"v1",
+												"hubs"
+											],
+											"query": [
+												{
+													"key": "filter[extension.type]",
+													"value": "hubs:autodesk.bim360:Account"
+												}
+											]
+										},
+										"description": "Returns a collection of accessible hubs for this member.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-GET/"
+									},
+									"response": []
+								},
+								{
+									"name": "GET one ACC project",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.variables.set(\"project_name\", \"change to your project name\");"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"// find the specified project and setup the environment variable \"project_id\"",
+													"const project_name = pm.variables.get(\"project_name\") ",
+													"pm.test(\"find matches project by name: \" + project_name, function () {",
+													"    const body = JSON.parse(responseBody);",
+													"    const found = body.data.find(d => d.attributes.name == project_name)",
+													"",
+													"    pm.expect(found).to.not.be.undefined;",
+													"    ",
+													"    postman.setEnvironmentVariable(\"project_id\", found.id);",
+													"    postman.setEnvironmentVariable(\"project_id_without_b\", found.id.split(\"b.\").join(\"\"));",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_domain}}project/v1/hubs/{{hub_id}}/projects",
+											"host": [
+												"{{base_domain}}project"
+											],
+											"path": [
+												"v1",
+												"hubs",
+												"{{hub_id}}",
+												"projects"
+											]
+										},
+										"description": "Returns a collection of projects for a given hub_id. A project represents a BIM 360 Team project, a Fusion Team project, a BIM 360 Docs project, or an A360 Personal project. Multiple projects can be created within a single hub.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-GET/"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "Step 1: Find the Submittal Item ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Content-Type header present and is application/json\", () => {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"pm.test(\"Response body is not empty\", () => {",
+											"    var responseBody = pm.response.json();",
+											"    //pm.expect(responseBody.results && responseBody.results.length > 0).to.eql(true);",
+											"    pm.expect(responseBody.results).to.be.an(\"array\");",
+											"",
+											"    if(responseBody.results.length > 0) {",
+											"        pm.environment.set(\"item_id\", responseBody.results[0].id);",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/items",
+									"host": [
+										"{{base_domain}}construction"
+									],
+									"path": [
+										"submittals",
+										"v2",
+										"projects",
+										":projectId",
+										"items"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Maximal number of elements per page",
+											"disabled": true
+										},
+										{
+											"key": "offset",
+											"value": "2",
+											"description": "Starting position of the query in relation to the complete set of items",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "createdAt desc",
+											"description": "Comma-delimited list of fields to sort by in the format field asc/desc - ballInCourtUsers, ballInCourtCompanies, ballInCourtRoles, ballInCourtType, createdAt, createdBy, description, dueDate, id, identifier, leadTime, manager, managerType, managerDueDate, package.identifier, package.spec.identifier, packageId, packageIdentifier, packageSpecIdentifier, packageTitle, priority, publishedBy, publishedDate, receivedFromReview, receivedFromSubmitter, requiredApprovalDate, requiredDate, requiredOnJobDate, respondedAt, respondedBy, response.value, responseComment, responseId, revision, sentToReview, sentToReviewBy, sentToSubmitter, spec.identifier, specId, specIdentifier, specTitle, stateId, statusId, subcontractor, subcontractorType, submittedBy, submitterDueDate, subsection, title, type.value, typeId, updatedAt, updatedBy, watchers",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "Test3",
+											"description": "Search term in identifier, title, spec identifier, ball in court fields",
+											"disabled": true
+										},
+										{
+											"key": "filter[title]",
+											"value": "Test3,Water Closet",
+											"description": "Filter items by their title. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[statusId]",
+											"value": "1",
+											"description": "Filter items by their status id. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[specId]",
+											"value": "{{spec_id}}",
+											"description": "Filter items by their spec id. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[ballInCourtUsers]",
+											"value": "T5PKRC57TLQ8",
+											"description": "Filter items by their ball-in-court user id. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[ballInCourtCompanies]",
+											"value": "237390714",
+											"description": "Filter items by their ball-in-court company id. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[ballInCourtRoles]",
+											"value": "237390721",
+											"description": "Filter items by their ball-in-court role id. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[responseId]",
+											"value": "{{response_id}}",
+											"description": "Filter items by their response id. Separate multiple values with commas.",
+											"disabled": true
+										},
+										{
+											"key": "filter[typeId]",
+											"value": "{{item_type_id}}",
+											"description": "Filter items by their type id. Separate multiple values with commas.",
+											"disabled": true
+										},
+										{
+											"key": "filter[stateId]",
+											"value": "sbc-2",
+											"description": "Filter items by their state id. Separate multiple values with commas.",
+											"disabled": true
+										},
+										{
+											"key": "filter[identifier]",
+											"value": "8",
+											"description": "Filter items by their unique item identifier. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[leadTime]",
+											"value": "5",
+											"description": "Filter items by their lead time.",
+											"disabled": true
+										},
+										{
+											"key": "filter[revision]",
+											"value": "0",
+											"description": "Filter items by their revision. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[manager]",
+											"value": "W8ZDPLUTSJKZ",
+											"description": "Filter items by the Autodesk ID of the manager.",
+											"disabled": true
+										},
+										{
+											"key": "filter[managerType]",
+											"value": "1",
+											"description": "Filter items by the manager type.",
+											"disabled": true
+										},
+										{
+											"key": "filter[subcontractor]",
+											"value": "T5PKRC57TLQ8",
+											"description": "Filter items by the Autodesk ID of the subcontractor.",
+											"disabled": true
+										},
+										{
+											"key": "filter[subcontractorType]",
+											"value": "2",
+											"description": "Filter items by the subcontractor type.",
+											"disabled": true
+										},
+										{
+											"key": "filter[createdBy]",
+											"value": "W8ZDPLUTSJKZ",
+											"description": "Filter items by the Autodesk ID of the user that created the item.",
+											"disabled": true
+										},
+										{
+											"key": "filter[watchers]",
+											"value": "W8ZDPLUTSJKZ",
+											"description": "Filter items by the Autodesk ID of the watchers. Separate multiple values with commas.",
+											"disabled": true
+										},
+										{
+											"key": "filter[dueDate]",
+											"value": "2023-09-13",
+											"description": "Filter items by their due date, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[submitterDueDate]",
+											"value": "",
+											"description": "Filter items by their submitter’s due date, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[managerDueDate]",
+											"value": "",
+											"description": "Filter items by their managers’ due date, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[createdAt]",
+											"value": "",
+											"description": "Filter items by their creation date, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[sentToSubmitter]",
+											"value": "",
+											"description": "Filter items by their by the date they were sent to submittar, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[receivedFromSubmitter]",
+											"value": "",
+											"description": "Filter items by their by the date they were recieved from submittar, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[sentToReview]",
+											"value": "",
+											"description": "Filter items by their by the date they were sent from review, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[receivedFromReview]",
+											"value": "",
+											"description": "Filter items by their by the date they were received from review, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[publishedDate]",
+											"value": "",
+											"description": "Filter items by their by the date they were published, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[requiredDate]",
+											"value": "",
+											"description": "Filter items by their by the date when the responsible contractor needs to submit the Submittal to the Submittal Manager. in the following URL-encoded format YYYY-MM-DD. ",
+											"disabled": true
+										},
+										{
+											"key": "filter[requiredApprovalDate]",
+											"value": "",
+											"description": "Filter items by their required approval date, in the following URL-encoded format YYYY-MM-DD.",
+											"disabled": true
+										},
+										{
+											"key": "filter[requiredOnJobDate]",
+											"value": "",
+											"description": "Filter items by their by the date they are required on field (job site), in the following URL-encoded format YYYY-MM-DD. ",
+											"disabled": true
+										},
+										{
+											"key": "filter[updatedAt]",
+											"value": "",
+											"description": "Filter items by their by the date they were updated, in the following URL-encoded format YYYY-MM-DD. ",
+											"disabled": true
+										},
+										{
+											"key": "filter[id]",
+											"value": "54ca6379-2607-4fd9-9ec7-b60ae4b2b567",
+											"description": "Filter items by their unique submittals id. Separate multiple values with commas",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "projectId",
+											"value": "{{project_id_without_b}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Step 2: Find the Storage Object ID for the Attachment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Content-Type header present and is application/json\", () => {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"pm.test(\"Response body is not empty\", () => {",
+											"    var responseBody = pm.response.json();",
+											"    //pm.expect(responseBody.results && responseBody.results.length > 0).to.eql(true);",
+											"    pm.expect(responseBody.results).to.be.an(\"array\");",
+											"",
+											"    if(responseBody.results.length > 0) {",
+											"        pm.environment.set(\"attachment_id\", responseBody.results[0].id);",
+											"        pm.environment.set(\"attachment_storage_urn\", responseBody.results[0].uploadUrn);",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}construction/submittals/v2/projects/:projectId/items/:itemId/attachments",
+									"host": [
+										"{{base_domain}}construction"
+									],
+									"path": [
+										"submittals",
+										"v2",
+										"projects",
+										":projectId",
+										"items",
+										":itemId",
+										"attachments"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "1",
+											"description": "Maximal number of elements per page",
+											"disabled": true
+										},
+										{
+											"key": "offset",
+											"value": "1",
+											"description": "Starting position of the query in relation to the complete set of items",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "categoryId desc",
+											"description": "Comma-delimited list of fields to sort by in the format field asc/desc - id, isFileUploaded, asyncState, createdBy, createdAt, updatedBy, updatedAt, name, uploadUrn, urn, urnPage, resourceUrns, urnTypeId, urnVersion, revision, categoryId, isReview, isResponse",
+											"disabled": true
+										},
+										{
+											"key": "filter[categoryId]",
+											"value": "5",
+											"description": "Filter attachments by their category identifier. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[revision]",
+											"value": "1",
+											"description": "Filter attachments by their revision. Separate multiple values with commas",
+											"disabled": true
+										},
+										{
+											"key": "filter[isFileUploaded]",
+											"value": "true",
+											"description": "Filter attachments by whether they completed the upload process.",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "projectId",
+											"value": "{{project_id_without_b}}"
+										},
+										{
+											"key": "itemId",
+											"value": "{{item_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Step 3: Generate a Signed S3 URL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Content-Type header present and is application/json\", () => {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"pm.test(\"Response body is not empty\", () => {",
+											"    var responseBody = pm.response.json();",
+											"    pm.expect(responseBody).to.has.property('url');",
+											"",
+											"    pm.environment.set(\"attachment_download_url\", responseBody.url);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var objectUrn = pm.environment.get(\"attachment_storage_urn\");",
+											"",
+											"var result = objectUrn.replace('urn:adsk.objects:os.object:', '').split('/');",
+											"",
+											"pm.variables.set(\"attachment_storage_bucket_key\", result[0]);",
+											"pm.variables.set(\"attachment_storage_object_key\", result[1]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}oss/v2/buckets/:bucketKey/objects/:objectKey/signeds3download",
+									"host": [
+										"{{base_domain}}oss"
+									],
+									"path": [
+										"v2",
+										"buckets",
+										":bucketKey",
+										"objects",
+										":objectKey",
+										"signeds3download"
+									],
+									"variable": [
+										{
+											"key": "bucketKey",
+											"value": "{{attachment_storage_bucket_key}}"
+										},
+										{
+											"key": "objectKey",
+											"value": "{{attachment_storage_object_key}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Step 4: Download the File",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{attachment_download_url}}",
+									"host": [
+										"{{attachment_download_url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{base_domain}}authentication/v2/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "{{base_domain}}authentication/v2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "data:read",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "3LO Access Token",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://www.postman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
