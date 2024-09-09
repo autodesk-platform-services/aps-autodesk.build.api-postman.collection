@@ -21,7 +21,7 @@ This folder contains a Postman Collection that includes all the current ACC Phot
     - hub_name: The name of ACC hub/account that you want to operate on.
     - project_name:  The project name that you want to operate on.
 
-- Please add the Authorization for the collection, click **Edit Collection**, go to **Authorization** tab, make sure to use **OAuth 2.0** to get a 3 legged token, use it in the **Request Headers**.
+- Please add the Authorization for the collection, click on the **Collection** folder, go to **Authorization** tab, make sure to use **OAuth 2.0** to get a 3 legged token, use it in the **Request Headers**.
 ![3leggedToken](img/3leggedToken.png)
     - Callback URL: https://www.postman.com/oauth2/callback
     - Auth URL: https://developer.api.autodesk.com/authentication/v2/authorize
@@ -36,4 +36,4 @@ This folder contains a Postman Collection that includes all the current ACC Phot
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](../LICENSE) file for full details.
 
 ## Written by
-Eason Kang [@yiskang](https://twitter.com/yiskang), [Developer Advocate and Support](http://aps.autodesk.com)
+Eason Kang [in/eason-kang-b4398492/](https://www.linkedin.com/in/eason-kang-b4398492), [Developer Advocate](http://aps.autodesk.com)
