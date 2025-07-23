@@ -23,7 +23,7 @@ This folder contains a Postman Collection that includes all the current ACC Subm
     - client_secret: APS App Secret.
 
 <div style="text-align: center;">
-  <img src="Postman/img/env.png" alt="Postman Image" width="500" />
+  <img src="img/env.png" alt="Postman Image" width="500" />
  </div> 
 
 - Please add the Authorization for the collection, click on the **Collection** folder, go to **Authorization** tab, make sure to use **OAuth 2.0** to get a 3 legged token, use it in the **Request Headers**.
@@ -32,7 +32,7 @@ This folder contains a Postman Collection that includes all the current ACC Subm
     - Access Token URL: https://developer.api.autodesk.com/authentication/v2/token
 
 <div style="text-align: center;">
-  <img src="Postman/img/3leggedToken.png" alt="Postman Image" width="500" />
+  <img src="img/3leggedToken.png" alt="Postman Image" width="500" />
  </div> 
 
 ### Prepare Project ID
@@ -40,13 +40,13 @@ Under **Run Firstly-Get Project ID**:
 1. Input the account(hub) name in pre-scripts of **GET one ACC account**, this will get the account(hub) id of ACC account.
 
  <div style="text-align: center;">
-  <img src="Postman/img/account.png" alt="Postman Image" width="500" />
+  <img src="img/account.png" alt="Postman Image" width="500" />
  </div>
 
 2. Input the project name in pre-scripts of **GET one ACC project**, this will get the project id of ACC account from step #1. `project_id_with_b` will be used for working with RFI attachment uploading (Data Managament API). `project_id_without_b` will be used for all RFI APIs. 
 
 <div style="text-align: center;">
-  <img src="Postman/img/project.png" alt="Postman Image" width="500" />
+  <img src="img/project.png" alt="Postman Image" width="500" />
  </div> 
 
 ## Tips & Tricks
