@@ -1,0 +1,2311 @@
+{
+	"info": {
+		"_postman_id": "7304d7d7-9327-404d-8eb2-6ffba89da7fe",
+		"name": "ACC RFIs API",
+		"description": "[RFIs Stoplight](https://platform.stoplight.autodesk.com/docs/rfis-service/77342731ed835-rfi-core-service)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1440859"
+	},
+	"item": [
+		{
+			"name": "Run Firstly-Get Project ID",
+			"item": [
+				{
+					"name": "GET one ACC account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// find the specified project and setup the environment variable \"hub_id\"",
+									"const hub_name = pm.variables.get(\"hub_name\");",
+									"pm.test(\"find matches account by name: \" + hub_name, function () {",
+									"    const body = JSON.parse(responseBody);",
+									"    const found = body.data.find(d => d.attributes.name == hub_name);",
+									"",
+									"    pm.expect(found).to.not.be.undefined;",
+									"    ",
+									"    pm.environment.set(\"hub_id\", found.id);",
+									"    pm.environment.set(\"account_id\", found.id.split(\"b.\").join(\"\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"hub_name\", \"Developer Advocacy Support\");",
+									"",
+									"//clean variables that are not preset.",
+									"pm.environment.unset(\"project_id\"); ",
+									"pm.environment.unset(\"project_id_without_b\");",
+									"pm.environment.unset(\"custom_identifier\");",
+									"pm.environment.unset(\"one_rfi_id\");",
+									"pm.environment.unset(\"rfi_type_id\");",
+									"pm.environment.unset(\"text_custom_att_id\");",
+									"pm.environment.unset(\"multipleChoice_custom_att_id\");",
+									"pm.environment.unset(\"multipleChoice_option1\");",
+									"pm.environment.unset(\"multipleChoice_option2\");",
+									"pm.environment.unset(\"one_mamager_id\");",
+									"pm.environment.unset(\"one_mamager_type\");",
+									"pm.environment.unset(\"one_reviewer_id\");",
+									"pm.environment.unset(\"one_reviewer_type\");",
+									"pm.environment.unset(\"creator_id\");",
+									"pm.environment.unset(\"one_response_id\");",
+									"pm.environment.unset(\"virtualFolderUrn\");",
+									"pm.environment.unset(\"newStorageId\");",
+									"pm.environment.unset(\"bucketKey\");",
+									"pm.environment.unset(\"objectKey\");",
+									"pm.environment.unset(\"uploadUrl\");",
+									"pm.environment.unset(\"objectKey_without_ext\"); ",
+									"pm.environment.unset(\"downloadUrl\"); ",
+									"pm.environment.unset(\"uploadKey\"); "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs?filter[extension.type]=hubs:autodesk.bim360:Account",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs"
+							],
+							"query": [
+								{
+									"key": "filter[extension.type]",
+									"value": "hubs:autodesk.bim360:Account"
+								}
+							]
+						},
+						"description": "Returns a collection of accessible hubs for this member.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "GET one ACC project",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"project_name\", \"Centric Hospital\");",
+									"",
+									" ",
+									"",
+									"",
+									"",
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// find the specified project and setup the environment variable \"project_id\"",
+									"const project_name = pm.variables.get(\"project_name\") ",
+									"pm.test(\"find matches project by name: \" + project_name, function () {",
+									"    const body = JSON.parse(responseBody);",
+									"    const found = body.data.find(d => d.attributes.name == project_name)",
+									"",
+									"    pm.expect(found).to.not.be.undefined;",
+									"    ",
+									"    postman.setEnvironmentVariable(\"project_id\", found.id);",
+									"    postman.setEnvironmentVariable(\"project_id_without_b\", found.id.split(\"b.\").join(\"\"));",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}project/v1/hubs/{{hub_id}}/projects",
+							"host": [
+								"{{base_domain}}project"
+							],
+							"path": [
+								"v1",
+								"hubs",
+								"{{hub_id}}",
+								"projects"
+							]
+						},
+						"description": "Returns a collection of projects for a given hub_id. A project represents a BIM 360 Team project, a Fusion Team project, a BIM 360 Docs project, or an A360 Personal project. Multiple projects can be created within a single hub.<br/>\nhttps://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-GET/"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "API Reference",
+			"item": [
+				{
+					"name": "RFI Type",
+					"item": [
+						{
+							"name": "Get RFI Types",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const res = pm.response.json();",
+											"",
+											"//get one ",
+											"if (res.results && Array.isArray(res.results)) {",
+											"  const usType = res.results.find(workflow => workflow.wfType === \"US\");",
+											"  if (usType) {",
+											"    pm.environment.set(\"rfi_type_id\", usType.id);",
+											"  }",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.unset(\"rfi_type_id\");",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-user-id",
+										"value": "123456",
+										"type": "default"
+									},
+									{
+										"key": "x-ads-token-data",
+										"value": "{ \"access_token\": { \"client_id\": \"123456\"} }",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfi-types",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfi-types"
+									],
+									"query": [
+										{
+											"key": "filter[status]",
+											"value": "active",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Workflow",
+					"item": [
+						{
+							"name": "Get Workflow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"let responseData = pm.response.json();",
+											"",
+											"//get two managers id for transition",
+											"let managers = responseData.projectRolesMapping.find(i=>i.name == \"projectGC\")",
+											"pm.environment.set(\"one_mamager_id\", managers.permittedAssignees[0].id);",
+											"pm.environment.set(\"one_mamager_type\", managers.permittedAssignees[0].type);",
+											" ",
+											"",
+											"//get one reviewer for transition/response",
+											"let reviewers = responseData.projectRolesMapping.find(i=>i.name == \"projectReviewer\")",
+											"pm.environment.set(\"one_reviewer_id\", reviewers.permittedAssignees[0].id);",
+											"pm.environment.set(\"one_reviewer_type\", reviewers.permittedAssignees[0].type);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/workflow",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"workflow"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Custom Attributes",
+					"item": [
+						{
+							"name": "Get project custom attributes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"let responseData = pm.response.json();",
+											"//get one custom attribute of Text type",
+											"let textAtt = responseData.results.find(i=>i.type==\"text\" && i.multipleChoice == null);",
+											"pm.test(\"Text Attribute Available\", function () {",
+											"     textAtt!=null && textAtt!=null",
+											"});",
+											" ",
+											"pm.environment.set(\"text_custom_att_id\", textAtt.id);",
+											"",
+											"",
+											"let multipleChoiceAtt = responseData.results.find(i=> i.multipleChoice == true && i.possibleValues.length>2);",
+											"console.log(multipleChoiceAtt)",
+											"pm.test(\"multipleChoice Attribute Available\", function () {",
+											"     multipleChoiceAtt!=null && multipleChoiceAtt!=null",
+											"});",
+											"",
+											"pm.environment.set(\"multipleChoice_custom_att_id\", multipleChoiceAtt.id);",
+											" ",
+											"",
+											" //get two choices option ids",
+											" pm.environment.set(\"multipleChoice_option1\", multipleChoiceAtt.possibleValues[0].id);",
+											" pm.environment.set(\"multipleChoice_option2\", multipleChoiceAtt.possibleValues[1].id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/attributes",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"attributes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create project custom attribute",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											" "
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const Uuid = require('uuid');",
+											"pm.environment.set(\"UUID\", Uuid.v4());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"some custom name\",\n  \"description\": \"some description\",\n  \"multipleChoice\": false,\n  \"possibleValues\": [\n    {\n      \"id\": \"db0036c9-09a6-4ec8-80c9-2065bd05fcad\",\n      \"name\": \"some value\"\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/attributes",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"attributes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update project custom attribute",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"updated name\",\n  \"status\": \"active\",\n  \"possibleValues\":{\n    \"newAttributes\":[\"newOptionNameForOption1\"],\n    \"updatedAttributes\":[{\n        \"id\":\"{{multipleChoice_option2}}\",\n        \"name\": \"newName\"\n     }],\n    \"deletedAttributes\":[\"{{multipleChoice_option1}}\"] \n  }\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/attributes/{{multipleChoice_custom_att_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"attributes",
+										"{{multipleChoice_custom_att_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "RFIs",
+					"item": [
+						{
+							"name": "Get user details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const res = pm.response.json();",
+											"",
+											"  pm.environment.set('creator_id', res.user.id);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/users/me",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search RFI",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const res = JSON.parse(responseBody);",
+											" ",
+											"pm.test('results should not be empty', () => {",
+											"    pm.expect(res.results).not.be.empty;",
+											"});",
+											"",
+											"//get first rfi from the collection",
+											"pm.environment.set(\"one_rfi_id\", res.results[0].id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"filter\": {\n     \"status\":[\"open\"],\n     \"dueDate\":\"2025-07-31T09:35:54.000Z..2025-08-31T09:35:54.000Z\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/search:rfis?offset=30",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"search:rfis"
+									],
+									"query": [
+										{
+											"key": "offset",
+											"value": "30"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get next custom identifier",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											"",
+											"if (res && res.next) {",
+											"  pm.environment.set('custom_identifier', res.next);",
+											"}",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/custom-identifier",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"custom-identifier"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create RFI",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											" ",
+											" pm.environment.set(\"one_rfi_id\", res.id);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const uuid = require('uuid');",
+											"const moment = require('moment');",
+											"",
+											"const rfiId = uuid.v4()",
+											"postman.setEnvironmentVariable('UUID', rfiId);",
+											"",
+											"",
+											"// set due day to be two weeks from now",
+											"const dueDate = `${moment().add(2, 'w').format('YYYY-MM-DDTHH:MM:ss.SSS')}` + 'Z';",
+											"postman.setEnvironmentVariable('DUE_DATE', dueDate);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Pipe Size  \",\n  \"status\": \"draft\",\n  \"question\": \"Is the pipe in room 3 the correct size?\",\n  \"suggestedAnswer\": \"No\",\n  \"dueDate\": \"2025-07-31T09:35:54.000Z\",\n  \"rfiTypeId\": \"{{rfi_type_id}}\",\n  \"customIdentifier\":\"{{custom_identifier}}\",\n  \"customAttributes\": [\n          {\n            \"id\": \"{{text_custom_att_id}}\",\n            \"values\": [\n              \"text value (also in values array)\"\n            ]\n          },\n          {\n            \"id\": \"{{multipleChoice_custom_att_id}}\",\n            \"values\": [\n              \"{{multipleChoice_option1}}\", \n             \"{{multipleChoice_option2}}\"\n            ]\n          }\n   ] \n  \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFI",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update RFI (Creator to Manager)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"open\" ,\n  \"assignedTo\":[ \n    {\n        \"id\":\"{{one_mamager_id}}\",\n        \"type\":\"{{one_mamager_type}}\"\n    }  \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update RFI (Manager to Reviewers)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"open\" ,\n  \"assignedTo\":[ \n    {\n        \"id\":\"{{one_reviewer_id}}\",\n        \"type\":\"{{one_reviewer_type}}\"\n    }  \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update RFI (Return to Creator)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"open\" ,\n  \"assignedTo\":[ \n    {\n        \"id\":\"{{creator_id}}\",\n        \"type\":\"{{one_reviewer_type}}\"\n    }  \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Response",
+					"item": [
+						{
+							"name": "Submit Response",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											"",
+											"if (res) {",
+											"  pm.environment.set(\"one_response_id\", res.response.id);  ",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"answered\",\n  \"text\": \"pm collection response\" ,\n  \"onBehalf\": \"{{one_reviewer_id}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/responses",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}",
+										"responses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update response",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"answered\",\n  \"text\": \"updated pm collection response with attachment\",\n  \"onBehalf\": \"{{one_reviewer_id}}\",\n  \"attachments\": [{\n            \"attachmentType\": \"rfiResponse\",\n            \"fileName\":\"{{objectKey}}\",\n            \"displayName\":\"{{attachmentFileName}}\",\n            \"storageUrn\": \"{{newStorageId}}\"\n  }]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/responses/{{one_response_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}",
+										"responses",
+										"{{one_response_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Get comments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJ1c2VyaWQiOiJBM1JHTTM3NVFUWjciLCJleHAiOjE1NjkxNjY5MDIsInNjb3BlIjpbInVzZXItcHJvZmlsZTpyZWFkIiwiZGF0YTp3cml0ZSIsImRhdGE6cmVhZCIsImRhdGE6Y3JlYXRlIiwiZGF0YTpzZWFyY2giLCJjb2RlOmFsbCIsImFjY291bnQ6cmVhZCIsImFjY291bnQ6d3JpdGUiXSwiY2xpZW50X2lkIjoiNGxPODRmZG9ZM25BTXl0azBLNmJCcUhYSGl1TkpsZGYiLCJncmFudF9pZCI6InV2d2VOU292S2gyUU5qc01uM1ZYRTk0VVhjS2JxbXNLIiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20vYXVkL2p3dGV4cDYwIiwianRpIjoicmdrZ0YxUFllTTNic1htY3Bub2R4VGdNc3lDMHhPb1FIbUp3R3RJVXplbkRRVE1NOURvNTdUbjVKYVNIRFZ2USJ9.h3EC8edw7UO9IdJKECgqt4acZ_EiRKvjFNvpI9Bv2Qk"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{RFI_ID}}/comments",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{RFI_ID}}",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create comment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const Uuid = require('uuid');",
+											"pm.environment.set(\"COMMENT_ID\", Uuid.v4());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"body\": \"Test comment from PM collection\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{RFI_ID}}/comments",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{RFI_ID}}",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Attachments",
+					"item": [
+						{
+							"name": "List RFI attachments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{RFI_ID}}/attachments",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{RFI_ID}}",
+										"attachments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tutorials",
+			"item": [
+				{
+					"name": "Download RFI Attachment",
+					"item": [
+						{
+							"name": "00-Prerequisites",
+							"request": {
+								"method": "VIEW",
+								"header": [],
+								"url": {
+									"raw": "Prepare valid Project ID, RFI ID, 3-legged or SSA token, ensure one attachment is avaialble with this RFI. Ensure this user has permission to view this RFI",
+									"host": [
+										"Prepare valid Project ID, RFI ID, 3-legged or SSA token, ensure one attachment is avaialble with this RFI",
+										" Ensure this user has permission to view this RFI"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "01-Get RFI Attachments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resonse = JSON.parse(pm.response.text());",
+											"var storageId = resonse.results[0].storageUrn",
+											"pm.environment.set(\"storageId\",storageId);",
+											"const parsedData = storageId.match('^urn:adsk\\.objects:os\\.object:([-_.a-z0-9]{3,128})\\/(.+)$');",
+											"const bucketKey = parsedData[1];",
+											"const objectKey = parsedData[2];",
+											"pm.environment.set(\"bucketKey\",bucketKey);",
+											"pm.environment.set(\"objectKey\",objectKey);",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/attachments",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}",
+										"attachments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "02-GET S3 signed Url",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resonse = JSON.parse(pm.response.text());",
+											"var downloadUrl = resonse.url;",
+											"pm.environment.set(\"downloadUrl\",downloadUrl);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/oss/v2/buckets/{{bucketKey}}/objects/{{objectKey}}/signeds3download",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"{{objectKey}}",
+										"signeds3download"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "03-Download One Attachment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{downloadUrl}}",
+									"host": [
+										"{{downloadUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create RFI",
+					"item": [
+						{
+							"name": "00-Prerequisites",
+							"request": {
+								"method": "VIEW",
+								"header": [],
+								"url": {
+									"raw": "Prepare valid Project ID,  3-legged or SSA token Ensure this user has permission to create RFI",
+									"host": [
+										"Prepare valid Project ID,  3-legged or SSA token Ensure this user has permission to create RFI"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const res = pm.response.json();",
+											"",
+											"  pm.environment.set('creator_id', res.user.id);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/users/me",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Workflow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"let responseData = pm.response.json();",
+											"",
+											"//get two managers id for transition",
+											"let managers = responseData.projectRolesMapping.find(i=>i.name == \"projectGC\")",
+											"pm.environment.set(\"one_mamager_id\", managers.permittedAssignees[0].id);",
+											"pm.environment.set(\"one_mamager_type\", managers.permittedAssignees[0].type);",
+											" ",
+											"",
+											"//get one reviewer for transition/response",
+											"let reviewers = responseData.projectRolesMapping.find(i=>i.name == \"projectReviewer\")",
+											"pm.environment.set(\"one_reviewer_id\", reviewers.permittedAssignees[0].id);",
+											"pm.environment.set(\"one_reviewer_type\", reviewers.permittedAssignees[0].type);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/workflow",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"workflow"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFI Types",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const res = pm.response.json();",
+											"",
+											"//get one ",
+											"if (res.results && Array.isArray(res.results)) {",
+											"  const usType = res.results.find(workflow => workflow.wfType === \"US\");",
+											"  if (usType) {",
+											"    pm.environment.set(\"rfi_type_id\", usType.id);",
+											"  }",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.unset(\"rfi_type_id\");",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-user-id",
+										"value": "123456",
+										"type": "default"
+									},
+									{
+										"key": "x-ads-token-data",
+										"value": "{ \"access_token\": { \"client_id\": \"123456\"} }",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfi-types",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfi-types"
+									],
+									"query": [
+										{
+											"key": "filter[status]",
+											"value": "active",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get project custom attributes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"let responseData = pm.response.json();",
+											"//get one custom attribute of Text type",
+											"let textAtt = responseData.results.find(i=>i.type==\"text\" && i.multipleChoice == null);",
+											"pm.test(\"Text Attribute Available\", function () {",
+											"     textAtt!=null && textAtt!=null",
+											"});",
+											" ",
+											"pm.environment.set(\"text_custom_att_id\", textAtt.id);",
+											"",
+											"",
+											"let multipleChoiceAtt = responseData.results.find(i=> i.multipleChoice == true && i.possibleValues.length>2);",
+											"console.log(multipleChoiceAtt)",
+											"pm.test(\"multipleChoice Attribute Available\", function () {",
+											"     multipleChoiceAtt!=null && multipleChoiceAtt!=null",
+											"});",
+											"",
+											"pm.environment.set(\"multipleChoice_custom_att_id\", multipleChoiceAtt.id);",
+											" ",
+											"",
+											" //get two choices option ids",
+											" pm.environment.set(\"multipleChoice_option1\", multipleChoiceAtt.possibleValues[0].id);",
+											" pm.environment.set(\"multipleChoice_option2\", multipleChoiceAtt.possibleValues[1].id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/attributes",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"attributes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get next custom identifier Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											"",
+											"if (res && res.next) {",
+											"  pm.environment.set('custom_identifier', res.next);",
+											"}",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/custom-identifier",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"custom-identifier"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create RFI",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											" ",
+											" pm.environment.set(\"one_rfi_id\", res.id);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const uuid = require('uuid');",
+											"const moment = require('moment');",
+											"",
+											"const rfiId = uuid.v4()",
+											"postman.setEnvironmentVariable('UUID', rfiId);",
+											"",
+											"",
+											"// set due day to be two weeks from now",
+											"const dueDate = `${moment().add(2, 'w').format('YYYY-MM-DDTHH:MM:ss.SSS')}` + 'Z';",
+											"postman.setEnvironmentVariable('DUE_DATE', dueDate);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Pipe Size\",\n  \"status\": \"draft\",\n  \"question\": \"Is the pipe in room 3 the correct size?\",\n  \"suggestedAnswer\": \"No\",\n  \"dueDate\": \"2025-07-31T09:35:54.000Z\",\n  \"rfiTypeId\": \"{{rfi_type_id}}\",\n  \"customIdentifier\":\"{{custom_identifier}}\",\n  \"customAttributes\": [\n          {\n            \"id\": \"{{text_custom_att_id}}\",\n            \"values\": [\n              \"text value (also in values array)\"\n            ]\n          },\n          {\n            \"id\": \"{{multipleChoice_custom_att_id}}\",\n            \"values\": [\n              \"{{multipleChoice_option1}}\", \n             \"{{multipleChoice_option2}}\"\n            ]\n          }\n   ] \n  \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "RFI Transition",
+					"item": [
+						{
+							"name": "00-Prerequisites",
+							"request": {
+								"method": "VIEW",
+								"header": [],
+								"url": {
+									"raw": "Prepare valid Project ID,  RFI ID (from tutorial Create RFI), 3-legged or SSA token Ensure this user has permission to update RFI",
+									"host": [
+										"Prepare valid Project ID,  RFI ID (from tutorial Create RFI), 3-legged or SSA token Ensure this user has permission to update RFI"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "01-Get RFI (Check permittedActions)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "02-Update RFI (Creator to Manager)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"open\" ,\n  \"assignedTo\":[ \n    {\n        \"id\":\"{{one_mamager_id}}\",\n        \"type\":\"{{one_mamager_type}}\"\n    }  \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "03-Update RFI (Manager to Reviewers)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"open\" ,\n  \"assignedTo\":[ \n    {\n        \"id\":\"{{one_reviewer_id}}\",\n        \"type\":\"{{one_reviewer_type}}\"\n    }  \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "03-Update RFI (Return to Creator)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"open\" ,\n  \"assignedTo\":[ \n    {\n        \"id\":\"{{creator_id}}\",\n        \"type\":\"{{one_reviewer_type}}\"\n    }  \n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Response with  Attachment",
+					"item": [
+						{
+							"name": "00-Prerequisites",
+							"request": {
+								"method": "VIEW",
+								"header": [],
+								"url": {
+									"raw": "Prepare valid ProjectId, RFI ID, Response Id, attachmentFileName, 3-legged token or SSA token. Ensure the RFI permission allows the user to create response on this RFI",
+									"host": [
+										"Prepare valid ProjectId, RFI ID, Response Id, attachmentFileName, 3-legged token or SSA token",
+										" Ensure the RFI permission allows the user to create response on this RFI"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "01-Get RFI Virtual Folder",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resonse = JSON.parse(pm.response.text());",
+											"const virtualFolderUrn = resonse.virtualFolderUrn;",
+											"pm.environment.set(\"virtualFolderUrn\",virtualFolderUrn);  "
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/vnd.api+json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "02-Create Storage and Get bucket and object keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resonse = JSON.parse(pm.response.text());",
+											"const newStorageId = resonse.data.id;",
+											"const parsedData = newStorageId.match('^urn:adsk\\.objects:os\\.object:([-_.a-z0-9]{3,128})\\/(.+)$');",
+											"const bucketKey = parsedData[1];",
+											"const objectKey = parsedData[2];",
+											"pm.environment.set(\"newStorageId\",newStorageId); ",
+											"pm.environment.set(\"bucketKey\",bucketKey);",
+											"pm.environment.set(\"objectKey\",objectKey); ",
+											"pm.environment.set(\"objectKey_without_ext\",objectKey.split(\".\")[0]); "
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/vnd.api+json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"jsonapi\": {\n          \"version\": \"1.0\"\n        },\n        \"data\": {\n          \"type\": \"objects\",\n          \"attributes\": {\n            \"name\": \"{{attachmentFileName}}\"\n          },\n          \"relationships\": {\n            \"target\": {\n              \"data\": {\n                \"type\": \"folders\",\n                \"id\": \"{{virtualFolderUrn}}\"\n              }\n            }\n          }\n        }\n      }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/data/v1/projects/{{project_id}}/storage",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"data",
+										"v1",
+										"projects",
+										"{{project_id}}",
+										"storage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "03-GET S3 signed upload url",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var resonse = JSON.parse(pm.response.text());",
+											" pm.environment.set(\"uploadKey\",resonse.uploadKey);",
+											" pm.environment.set(\"uploadUrl\",resonse.urls[0]);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_domain}}/oss/v2/buckets/{{bucketKey}}/objects/{{objectKey}}/signeds3upload",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"{{objectKey}}",
+										"signeds3upload"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "04-Upload Attachment File",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "file",
+									"file": {
+										"src": "/Users/liangx/Desktop/Screenshot 2025-07-13 at 10.27.32.png"
+									}
+								},
+								"url": {
+									"raw": "{{uploadUrl}}",
+									"host": [
+										"{{uploadUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "05-Complete Uploading",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uploadKey\": \"{{uploadKey}}\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/oss/v2/buckets/{{bucketKey}}/objects/{{objectKey}}/signeds3upload",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"{{objectKey}}",
+										"signeds3upload"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "06-Submit Response with Attachment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											"",
+											"if (res) {",
+											"  pm.environment.set(\"RESPONSE_ID\", res.id);  ",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"answered\",\n  \"text\": \"updated pm collection response with attachment\",\n  \"onBehalf\":\"\",\n   \"attachments\": [{\n            \"attachmentType\": \"rfiResponse\",\n            \"fileName\":\"{{objectKey}}\",\n            \"displayName\":\"mytest.png\",\n            \"storageUrn\": \"{{newStorageId}}\"\n  }]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/responses",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}",
+										"responses"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Official Response",
+					"item": [
+						{
+							"name": "00-Prerequisites",
+							"request": {
+								"method": "VIEW",
+								"header": [],
+								"url": {
+									"raw": "Prepare valid ProjectId, RFI ID, attachment data from previous tutorial, 3-legged token or SSA token. Ensure the RFI permission allows the user to create response on this RFI",
+									"host": [
+										"Prepare valid ProjectId, RFI ID, attachment data from previous tutorial, 3-legged token or SSA token",
+										" Ensure the RFI permission allows the user to create response on this RFI"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "01-Get RFI (Check permittedActions)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "02-Submit Response with Attachment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json();",
+											"",
+											"if (res) {",
+											"  pm.environment.set(\"RESPONSE_ID\", res.id);  ",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": \"closed\",\n  \"officialResponse\": \"updated pm collection response with attachment\",\n  \"officialResponseStatus\": \"answered\", \n  \"attachments\": [{\n            \"attachmentType\": \"rfiOfficialResponse\",\n            \"fileName\":\"{{objectKey}}\",\n            \"displayName\":\"{{attachmentFileName}}\",\n            \"storageUrn\": \"{{newStorageId}}\"\n  }]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}}/responses",
+									"host": [
+										"{{base_domain}}"
+									],
+									"path": [
+										"construction",
+										"rfis",
+										"v3",
+										"projects",
+										"{{project_id_without_b}}",
+										"rfis",
+										"{{one_rfi_id}}}",
+										"responses"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "scope",
+				"value": "data:read data:write data:create",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v2/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://www.getpostman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "access_token",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
