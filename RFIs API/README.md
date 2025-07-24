@@ -1,4 +1,4 @@
-# Postman Collection for ACC Submittals API
+# Postman Collection for ACC RFIs API
 
 [![Postman](https://img.shields.io/badge/Postman-v11-orange.svg)](https://www.getpostman.com/)
 
@@ -7,7 +7,7 @@
 ![Beginner](https://img.shields.io/badge/Level-Beginner-green.svg)
 [![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
-This folder contains a Postman Collection that includes all the current ACC Submittals API. The collection together with the environment help you easily test these endpoints.
+This folder contains a Postman Collection that includes all the current ACC RFIs API. The collection together with the environment help you easily test these endpoints.
 
 
 <div style="text-align: center;">
