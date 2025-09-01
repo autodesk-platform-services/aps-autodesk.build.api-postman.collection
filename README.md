@@ -18,6 +18,7 @@ This github repository provides Postman collections for ACC APIs that contains a
  * [Forms API](./Forms%20API)
  * [Locations API](./Locations%20API)
  * [Photos API](./Photos%20API)
+ * [RFIs API](./RFIs%20API)
  * [Submittals API](./Submittals%20API)
  * [AutoSpecs API](./AutoSpecs%20API)
 

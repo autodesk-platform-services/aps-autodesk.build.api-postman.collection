@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "7304d7d7-9327-404d-8eb2-6ffba89da7fe",
+		"_postman_id": "30bd42ed-3fbe-4923-a1df-d900038f4529",
 		"name": "ACC RFIs API",
 		"description": "[RFIs Stoplight](https://platform.stoplight.autodesk.com/docs/rfis-service/77342731ed835-rfi-core-service)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "1440859"
+		"_exporter_id": "39082503"
 	},
 	"item": [
 		{
@@ -42,7 +42,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.variables.set(\"hub_name\", \"Developer Advocacy Support\");",
+									"pm.variables.set(\"hub_name\", \"change to your hub/account name\");",
 									"",
 									"//clean variables that are not preset.",
 									"pm.environment.unset(\"project_id\"); ",
@@ -105,7 +105,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.variables.set(\"project_name\", \"Centric Hospital\");",
+									"pm.variables.set(\"project_name\", \"change to your project name\");",
 									"",
 									" ",
 									"",
@@ -229,18 +229,7 @@
 							],
 							"request": {
 								"method": "GET",
-								"header": [
-									{
-										"key": "x-user-id",
-										"value": "123456",
-										"type": "default"
-									},
-									{
-										"key": "x-ads-token-data",
-										"value": "{ \"access_token\": { \"client_id\": \"123456\"} }",
-										"type": "default"
-									}
-								],
+								"header": [],
 								"url": {
 									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfi-types",
 									"host": [
@@ -1003,7 +992,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{RFI_ID}}/comments",
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/comments",
 									"host": [
 										"{{base_domain}}"
 									],
@@ -1014,7 +1003,7 @@
 										"projects",
 										"{{project_id_without_b}}",
 										"rfis",
-										"{{RFI_ID}}",
+										"{{one_rfi_id}}",
 										"comments"
 									]
 								}
@@ -1062,7 +1051,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{RFI_ID}}/comments",
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/comments",
 									"host": [
 										"{{base_domain}}"
 									],
@@ -1073,7 +1062,7 @@
 										"projects",
 										"{{project_id_without_b}}",
 										"rfis",
-										"{{RFI_ID}}",
+										"{{one_rfi_id}}",
 										"comments"
 									]
 								}
@@ -1106,7 +1095,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{RFI_ID}}/attachments",
+									"raw": "{{base_domain}}/construction/rfis/v3/projects/{{project_id_without_b}}/rfis/{{one_rfi_id}}/attachments",
 									"host": [
 										"{{base_domain}}"
 									],
@@ -1117,7 +1106,7 @@
 										"projects",
 										"{{project_id_without_b}}",
 										"rfis",
-										"{{RFI_ID}}",
+										"{{one_rfi_id}}",
 										"attachments"
 									]
 								}
@@ -1506,7 +1495,7 @@
 							"response": []
 						},
 						{
-							"name": "Get next custom identifier Copy",
+							"name": "Get next custom identifier",
 							"event": [
 								{
 									"listen": "test",
@@ -1900,6 +1889,16 @@
 										"type": "text/javascript",
 										"packages": {}
 									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
 							],
 							"request": {
@@ -2069,7 +2068,7 @@
 											"const res = pm.response.json();",
 											"",
 											"if (res) {",
-											"  pm.environment.set(\"RESPONSE_ID\", res.id);  ",
+											"  pm.environment.set(\"one_response_id\", res.id);  ",
 											"}"
 										],
 										"type": "text/javascript",
@@ -2082,7 +2081,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"status\": \"answered\",\n  \"text\": \"updated pm collection response with attachment\",\n  \"onBehalf\":\"\",\n   \"attachments\": [{\n            \"attachmentType\": \"rfiResponse\",\n            \"fileName\":\"{{objectKey}}\",\n            \"displayName\":\"mytest.png\",\n            \"storageUrn\": \"{{newStorageId}}\"\n  }]\n}",
+									"raw": "{\n  \"status\": \"answered\",\n  \"text\": \"updated pm collection response with attachment\",\n  \"onBehalf\":\"\",\n   \"attachments\": [{\n            \"attachmentType\": \"rfiResponse\",\n            \"fileName\":\"{{objectKey}}\",\n            \"displayName\":\"{{attachmentFileName}}\",\n            \"storageUrn\": \"{{newStorageId}}\"\n  }]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2192,7 +2191,7 @@
 											"const res = pm.response.json();",
 											"",
 											"if (res) {",
-											"  pm.environment.set(\"RESPONSE_ID\", res.id);  ",
+											"  pm.environment.set(\"one_response_id\", res.id);  ",
 											"}"
 										],
 										"type": "text/javascript",
@@ -2240,6 +2239,11 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
+				"key": "redirect_uri",
+				"value": "https://www.postman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
 				"key": "scope",
 				"value": "data:read data:write data:create",
 				"type": "string"
@@ -2267,11 +2271,6 @@
 			{
 				"key": "authUrl",
 				"value": "https://developer.api.autodesk.com/authentication/v2/authorize",
-				"type": "string"
-			},
-			{
-				"key": "redirect_uri",
-				"value": "https://www.getpostman.com/oauth2/callback",
 				"type": "string"
 			},
 			{
