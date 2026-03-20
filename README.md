@@ -7,11 +7,11 @@
 ![Beginner](https://img.shields.io/badge/Level-Beginner-green.svg)
 [![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
-Autodesk Construction Cloud (ACC) is Autodesk’s new unified platform that connects workflows, teams and data at every stage of construction to reduce risk, maximize efficiency, and increase profits. It includes a few products: Autodesk Build, Autodesk Collaborate and Autodesk TakeOff etc. All of them are built on Autodesk Docs.
+Forma for Construction (Autodesk Forma) is Autodesk’s new unified platform that connects workflows, teams and data at every stage of construction to reduce risk, maximize efficiency, and increase profits. It includes a few products: Autodesk Build, Autodesk Collaborate and Autodesk TakeOff etc. All of them are built on Forma Data Management.
 
-The ACC APIs allow developers to develop apps that integrate with the ACC platform to extend its capabilities in the construction ecosystem. Check **Blogs** for more details.
+The Forma APIs allow developers to develop apps that integrate with the Forma platform to extend its capabilities in the construction ecosystem. Check **Blogs** for more details.
 
-This github repository provides Postman collections for ACC APIs that contains a fewer endpoints. Each collection of the categories will go to corresponding child folder. More new APIs will be added in the list below with time.
+This github repository provides Postman collections for Forma APIs that contains a fewer endpoints. Each collection of the categories will go to corresponding child folder. More new APIs will be added in the list below with time.
 
 ## API Categories
 
@@ -36,8 +36,8 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 To start the test, click the corresponding link in the list of **API Categories** or navigate to the corresponding child folder. The *readme.md* file in the folder provides instructions on how to test. 
 
 ## Blogs:
-- [Autodesk Construction Cloud Unified Products: Does it Affect My Application?](https://aps.autodesk.com/blog/autodesk-construction-cloud-unified-products-does-it-affect-my-application)
-- [Autodesk Build and Other Autodesk Construction Cloud Unified Products Launch](https://aps.autodesk.com/blog/autodesk-build-and-other-autodesk-construction-cloud-unified-products-launch)
+- [Autodesk Forma Unified Products: Does it Affect My Application?](https://aps.autodesk.com/blog/autodesk-construction-cloud-unified-products-does-it-affect-my-application)
+- [Autodesk Build and Other Autodesk Forma Unified Products Launch](https://aps.autodesk.com/blog/autodesk-build-and-other-autodesk-construction-cloud-unified-products-launch)
 - [APS Blog](https://aps.autodesk.com/categories/bim-360-api)
 - [Field of View](https://fieldofviewblog.wordpress.com/), a BIM focused blog
 
