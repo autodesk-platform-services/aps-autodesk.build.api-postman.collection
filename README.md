@@ -1,4 +1,4 @@
-# Postman Collection for Autodesk Build API
+# Postman Collection for Autodesk Forma Build API
 
 [![Postman](https://img.shields.io/badge/Postman-v8-orange.svg)](https://www.getpostman.com/)
 
