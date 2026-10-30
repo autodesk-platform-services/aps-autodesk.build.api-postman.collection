@@ -527,7 +527,7 @@
 							"response": []
 						},
 						{
-							"name": "Step 5: Get forms of non-pdf form template",
+							"name": "Step 5: Get forms of non-pdf form template [deprecated]",
 							"event": [
 								{
 									"listen": "test",
@@ -647,7 +647,7 @@
 							"response": []
 						},
 						{
-							"name": "Step 6: Get forms of pdf template",
+							"name": "Step 6: Get forms of pdf template [deprecated]",
 							"event": [
 								{
 									"listen": "test",
@@ -873,7 +873,7 @@
 							"response": []
 						},
 						{
-							"name": "Step 2: Find the Forms by Location",
+							"name": "Step 2: Find the Forms by Location [deprecated]",
 							"event": [
 								{
 									"listen": "test",
@@ -1261,7 +1261,7 @@
 							"response": []
 						},
 						{
-							"name": "Step 4: Update the Form Fields",
+							"name": "Step 4: Update the Form Fields [deprecated]",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -1597,6 +1597,780 @@
 			"name": "API References",
 			"item": [
 				{
+					"name": "Get Forms v2 [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get Forms v2: status and paginated response\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.data).to.be.an(\"array\");",
+									"    pm.expect(body.pagination).to.be.an(\"object\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms?offset=0&limit=50&include=layoutInfo&sort=updatedAt desc",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Increase by the number of records returned to retrieve the next page."
+								},
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "1-50 results per page."
+								},
+								{
+									"key": "include",
+									"value": "layoutInfo",
+									"description": "Repeat include for sublocations or inactiveFormTemplates."
+								},
+								{
+									"key": "sort",
+									"value": "updatedAt desc",
+									"description": "Up to three comma-separated field/direction expressions; replaces sortBy and sortOrder."
+								},
+								{
+									"key": "ids",
+									"value": "{{formId}}",
+									"disabled": true,
+									"description": "Enable to retrieve a specific form."
+								},
+								{
+									"key": "templateId",
+									"value": "{{templateId}}",
+									"disabled": true
+								},
+								{
+									"key": "locationIds",
+									"value": "{{locationId}}",
+									"disabled": true
+								},
+								{
+									"key": "includeSubLocations",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "statuses",
+									"value": "inProgress",
+									"disabled": true,
+									"description": "V2 statuses: inProgress, inReview, closed, discarded, archived."
+								},
+								{
+									"key": "search",
+									"value": "Site inspection",
+									"disabled": true
+								},
+								{
+									"key": "updatedAfter",
+									"value": "2026-01-01T00:00:00Z",
+									"disabled": true,
+									"description": "Inclusive lower bound."
+								},
+								{
+									"key": "updatedBefore",
+									"value": "2026-12-31T23:59:59Z",
+									"disabled": true,
+									"description": "Inclusive upper bound."
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								}
+							]
+						},
+						"description": "Lists forms without embedding field, table, PDF or weather values. Set formId to a web form's data[].id, templateId to its formTemplateId and layoutId to its nativeForm.layoutId. Set pdfFormId from a PDF form and weatherId from the desired form's weatherId. IDs are intentionally selected manually so write/delete demos never target an arbitrary form. Follow pagination.nextUrl for further pages. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-forms-v2-GET/\nMigration: https://aps.autodesk.com/en/docs/acc/v1/overview/migration-guides/forms-v1-to-v2/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Layout [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get Layout: status and layout structure\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.layout.uid).to.be.a(\"string\");",
+									"    pm.expect(body.sections).to.be.an(\"array\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v1/projects/:projectId/layouts/:layoutId",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v1",
+								"projects",
+								":projectId",
+								"layouts",
+								":layoutId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "layoutId",
+									"value": "{{layoutId}}"
+								}
+							]
+						},
+						"description": "Returns the layout and its sections. Set layoutId from the selected web form's nativeForm.layoutId, then set sectionId from sections[].uid. This new endpoint uses v1, not v2. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-layouts-layoutId-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Layout Section [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get Layout Section: status and field definitions\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.section.uid).to.be.a(\"string\");",
+									"    pm.expect(body.sectionItems).to.be.an(\"array\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/layouts/:layoutId/sections/:sectionId",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"layouts",
+								":layoutId",
+								"sections",
+								":sectionId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "layoutId",
+									"value": "{{layoutId}}"
+								},
+								{
+									"key": "sectionId",
+									"value": "{{sectionId}}"
+								}
+							]
+						},
+						"description": "Returns sectionItems, tableColumns and conditional actions. For a text field (type=field, valueName=textVal), copy sectionItems[].schema into fieldId, not the item's uid. For a table (type=table), copy schema into tableFieldId; for a custom table also copy a text column's uid from the matching tableColumns entry into columnId. Column definitions reference their table item through layoutSectionItemUid. Match each value property to valueName or columnType. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-sections-sectionId-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Custom Field Values [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get Custom Field Values: status and paginated response\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.data).to.be.an(\"array\");",
+									"    pm.expect(body.pagination).to.be.an(\"object\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms/:formId/values?offset=0&limit=100",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"values"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"description": "1-100 results per page."
+								},
+								{
+									"key": "fieldIds",
+									"value": "{{fieldId}}",
+									"disabled": true,
+									"description": "Repeat for up to 100 field schema UUIDs."
+								},
+								{
+									"key": "sectionUid",
+									"value": "{{sectionId}}",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{formId}}"
+								}
+							]
+						},
+						"description": "Returns persisted non-tabular answers only; unanswered questions are absent. Join data[].fieldId to sectionItems[].schema from Get Layout Section to obtain labels and field types. Toggle values are normalized to True, False or NA. Use pagination.nextUrl for further pages. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-custom-values-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Table Values [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get Table Values: status and paginated response\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.data).to.be.an(\"array\");",
+									"    pm.expect(body.pagination).to.be.an(\"object\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v1/projects/:projectId/forms/:formId/table/:fieldId/values?offset=0&limit=125",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v1",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"table",
+								":fieldId",
+								"values"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "125",
+									"description": "1-250 results per page; default 125."
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{formId}}"
+								},
+								{
+									"key": "fieldId",
+									"value": "{{tableFieldId}}",
+									"description": "Table schema UUID, not a row ID or built-in alias."
+								}
+							]
+						},
+						"description": "Retrieves rows for one built-in or custom table. tableFieldId is sectionItems[].schema for type=table. Built-in UUIDs: Work Log 6c8055d5-1301-46f6-9d18-8a2a208a277e; Materials 2adf5ad9-d9d3-ee42-6fd8-015c34ce474d; Equipment 8af6c450-dd2a-32ae-0090-5493a9cc884e. Row data[].id can be used as rowId for updates/deletion; columns[].columnId joins column definitions from Get Layout Section. Use pagination.nextUrl for further pages. This new endpoint uses v1. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-get-table-values-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get PDF Field Values [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get PDF Field Values: status and name/value pairs\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.data).to.be.an(\"array\");",
+									"    pm.expect(body.pagination).to.be.an(\"object\");",
+									"    body.data.forEach(function (field) {",
+									"        pm.expect(field.name).to.be.a(\"string\");",
+									"        pm.expect(field).to.have.property(\"value\");",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms/:formId/pdf-values?offset=0&limit=200",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"pdf-values"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "200",
+									"description": "1-200 results per page."
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{pdfFormId}}",
+									"description": "Select a PDF form with an associated pdfFile, not a web form."
+								}
+							]
+						},
+						"description": "Returns PDF field name/value pairs; value can be null. Set pdfFormId from a PDF form returned by Get Forms v2. To download the PDF itself use that form's pdfFile.pdfUrl, not this endpoint. Use pagination.nextUrl for further pages. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-pdf-values-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project Weather Record [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Get Project Weather Record: status and weather structure\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.id).to.be.a(\"number\");",
+									"    pm.expect(body.hourlyWeather).to.be.an(\"array\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v3/projects/:projectId/weather/:weatherId",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v3",
+								"projects",
+								":projectId",
+								"weather",
+								":weatherId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "weatherId",
+									"value": "{{weatherId}}"
+								}
+							]
+						},
+						"description": "Set weatherId to the desired form's weatherId from Get Forms v2. Only forms that captured weather have a weather record. Temperatures are Celsius, wind speeds km/h and precipitation mm. This endpoint uses v3. Requires data:read and user context.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-get-weather-data-for-a-project-GET/"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Custom Field Values v2 [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Update Custom Field Values v2: status and form\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"formId\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customValues\": [\n        {\n            \"fieldId\": \"{{fieldId}}\",\n            \"textVal\": \"Site inspection completed successfully.\",\n            \"notes\": \"Updated through the Forms API v2 demo.\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms/:formId/values:batch-update?excludeFormResponse=false&includeNativeFormValues=true",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"values:batch-update"
+							],
+							"query": [
+								{
+									"key": "excludeFormResponse",
+									"value": "false",
+									"description": "Keep false for the response test; true returns 204 with no body."
+								},
+								{
+									"key": "includeNativeFormValues",
+									"value": "true"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{formId}}"
+								}
+							]
+						},
+						"description": "Writes to the selected editable draft/inProgress web form. Set fieldId to the schema of a text field from Get Layout Section. For other field types replace textVal with numberVal (number), dateVal (YYYY-MM-DD), toggleVal (e.g. True), choiceVal (configured choice), arrayVal (array of configured choices), or svgVal (base64 SVG, with name for the signer). Use exactly the value type defined by valueName. Maximum 10 customValues and 10 tabularValues per request. Requires data:write and user context with edit permission.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-valuesbatch-update-v2-PUT/"
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert Built-in Table Row v2 [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Upsert Built-in Table Row v2: status and form\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"formId\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tabularValues\": [\n        {\n            \"id\": \"{{rowId}}\",\n            \"schema\": \"worklogEntries\",\n            \"columns\": [\n                {\"columnName\": \"trade\", \"textVal\": \"Plumber\"},\n                {\"columnName\": \"headcount\", \"numberVal\": 2},\n                {\"columnName\": \"timespan\", \"timespanVal\": 28800000},\n                {\"columnName\": \"description\", \"textVal\": \"Installed piping\"}\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms/:formId/values:batch-update?excludeFormResponse=false&includeNativeFormValues=true",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"values:batch-update"
+							],
+							"query": [
+								{
+									"key": "excludeFormResponse",
+									"value": "false"
+								},
+								{
+									"key": "includeNativeFormValues",
+									"value": "true"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{formId}}"
+								}
+							]
+						},
+						"description": "Upserts a Work Log row on an editable draft/inProgress web form that contains that table. Set rowId to a newly generated UUID to insert, or an existing row ID from Get Table Values to update. Reuse the UUID to avoid inserting another row. timespanVal is milliseconds (28800000 = 8 hours). columnName is supported only for built-in tables. For materialsEntries use item/textVal, quantity/numberVal, unit/textVal, description/textVal; for equipmentEntries use item/textVal, quantity/numberVal, timespan/timespanVal, description/textVal. Maximum 10 rows per request. Requires data:write and user context with edit permission.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-valuesbatch-update-v2-PUT/"
+					},
+					"response": []
+				},
+				{
+					"name": "Upsert Custom Table Row v2 [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Upsert Custom Table Row v2: status and form\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"formId\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tabularValues\": [\n        {\n            \"id\": \"{{rowId}}\",\n            \"schema\": \"{{tableFieldId}}\",\n            \"columns\": [\n                {\"columnId\": \"{{columnId}}\", \"textVal\": \"Custom table demo\"}\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms/:formId/values:batch-update?excludeFormResponse=false&includeNativeFormValues=true",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"values:batch-update"
+							],
+							"query": [
+								{
+									"key": "excludeFormResponse",
+									"value": "false"
+								},
+								{
+									"key": "includeNativeFormValues",
+									"value": "true"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{formId}}"
+								}
+							]
+						},
+						"description": "Requires a custom-table-capable template (nativeForm.version 13.0 or higher) and an editable draft/inProgress web form. Set tableFieldId to the table item's schema and columnId to a text column's uid from Get Layout Section. Use columnId, never columnName, for custom tables, and never both on the same cell. Replace textVal to match columnType: number_val/numberVal, integer_val/integerVal, array_val/arrayVal, uid_val/uidVal, date_val/dateVal, time_val/timeVal, timespan_val/timespanVal. Text columns allow at most 200 characters. Set rowId to a new UUID for insert or an existing row's ID for update; maximum 10 rows. Requires data:write and user context with edit permission.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-valuesbatch-update-v2-PUT/"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Table Row v2 [new]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Delete Table Row v2: status and form\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"formId\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tabularValues\": [\n        {\n            \"id\": \"{{rowId}}\",\n            \"schema\": \"{{tableSchema}}\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APSBaseDomain}}construction/forms/v2/projects/:projectId/forms/:formId/values:batch-delete?excludeFormResponse=false&includeNativeFormValues=true",
+							"host": [
+								"{{APSBaseDomain}}"
+							],
+							"path": [
+								"construction",
+								"forms",
+								"v2",
+								"projects",
+								":projectId",
+								"forms",
+								":formId",
+								"values:batch-delete"
+							],
+							"query": [
+								{
+									"key": "excludeFormResponse",
+									"value": "false",
+									"description": "Keep false for the response test; true returns 204 with no body."
+								},
+								{
+									"key": "includeNativeFormValues",
+									"value": "true"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{projectId}}"
+								},
+								{
+									"key": "formId",
+									"value": "{{formId}}"
+								}
+							]
+						},
+						"description": "DESTRUCTIVE: deletes existing table rows, not non-tabular field values. Select rowId explicitly from Get Table Values or a demo row you created. Set tableSchema to worklogEntries, materialsEntries or equipmentEntries for a built-in table; for a custom table set it to the same UUID as tableFieldId. The schema must match that row's table. Maximum 10 rows per request. The form must be editable and draft/inProgress. Requires data:write and user context with edit permission. Run manually on test data only; do not run the entire API References folder against production forms.\n\nReference: https://aps.autodesk.com/en/docs/acc/v1/reference/http/forms-valuesbatch-delete-POST/"
+					},
+					"response": []
+				},
+				{
 					"name": "Get Form Templates",
 					"event": [
 						{
@@ -1653,7 +2427,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Forms",
+					"name": "Get Forms [deprecated]",
 					"event": [
 						{
 							"listen": "test",
@@ -1913,7 +2687,7 @@
 					"response": []
 				},
 				{
-					"name": "Update  Text,Number,Date,Toggle Values of non-PDF Form",
+					"name": "Update  Text,Number,Date,Toggle Values of non-PDF Form [deprecated]",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -1981,7 +2755,7 @@
 					"response": []
 				},
 				{
-					"name": "Update  Signature Values of non-PDF Form",
+					"name": "Update  Signature Values of non-PDF Form [deprecated]",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -2048,7 +2822,7 @@
 					"response": []
 				},
 				{
-					"name": "Update  Choice,Array Values of non-PDF Form",
+					"name": "Update  Choice,Array Values of non-PDF Form [deprecated]",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -2084,7 +2858,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Tabular Values of non-PDF Form",
+					"name": "Update Tabular Values of non-PDF Form [deprecated]",
 					"event": [
 						{
 							"listen": "test",
@@ -2319,6 +3093,51 @@
 		},
 		{
 			"key": "templateId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "layoutId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "sectionId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fieldId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "tableFieldId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "columnId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "rowId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "tableSchema",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pdfFormId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "weatherId",
 			"value": "",
 			"type": "string"
 		}
